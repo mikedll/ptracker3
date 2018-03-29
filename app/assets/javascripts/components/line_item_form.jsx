@@ -41,7 +41,7 @@ class LineItemForm extends React.Component {
     return this.state.title && this.state.date && this.state.amount;
   }
   handleSubmit(e) {
-    $this = this;
+    var $this = this;
     e.preventDefault();
     $.post('', { line_item: this.state }, function(data) {
              $this.props.handleNewRecord(data);

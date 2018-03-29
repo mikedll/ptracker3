@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :line_items
+
+  resources :line_items, :only => [:index, :create, :destroy]
+
   get 'welcome/index'
 
   root 'welcome#index'

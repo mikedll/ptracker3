@@ -6,6 +6,12 @@ class LineItems extends React.Component {
     };
 
     this.addLineItem = this.addLineItem.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete(line_item) {
+    var line_items = this.state.line_items.slice().filter(function(li) { return li.id != line_item.id; } );
+    this.setState({line_items: line_items});
   }
   
   addLineItem(line_item) {
@@ -29,6 +35,9 @@ class LineItems extends React.Component {
   }
 
   render() {
+    var $this = this; 
+    var lineItems = this.state.line_items.map(function(li){ return React.createElement(LineItem, {key: li.id, line_item: li, handleDeleteLineItem: $this.handleDelete});});
+    
     return (
       <div className="line_items">
         <h2 className="title"> Line Items </h2>
@@ -44,9 +53,10 @@ class LineItems extends React.Component {
             <th>Date</th>
             <th>Title</th>
             <th>Amount</th>
+            <th>Actions</th>
           </thead>
           <tbody>
-            {this.state.line_items.map(function(li){return React.createElement(LineItem, {key: li.id, line_item: li});})}
+            {lineItems}
           </tbody>
         </table>
       </div>

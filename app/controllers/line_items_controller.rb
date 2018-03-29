@@ -13,6 +13,12 @@ class LineItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @line_item = LineItem.find(params[:id])
+    @line_item.destroy
+    head :no_content
+  end
+
   private
 
   def line_item_params
