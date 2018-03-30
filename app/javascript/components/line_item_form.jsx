@@ -1,5 +1,6 @@
+import React from 'react';
 
-class LineItemForm extends React.Component {
+export default class LineItemForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();

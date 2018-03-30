@@ -1,5 +1,6 @@
+import React from 'react';
 
-class AmountBox extends React.Component {
+export default class AmountBox extends React.Component {
   render() {
     return(
       <div className="col-md-4">

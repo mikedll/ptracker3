@@ -1,5 +1,6 @@
+import React from 'react';
 
-class LineItem extends React.Component {
+export default class LineItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleDelete = this.handleDelete.bind(this);

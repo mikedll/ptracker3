@@ -1,4 +1,10 @@
-class LineItems extends React.Component {
+import React from 'react';
+import update from 'immutability-helper';
+import LineItem from './line_item';
+import LineItemForm from './line_item_form';
+import AmountBox from './amount_box';
+
+export default class LineItems extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,7 +16,8 @@ class LineItems extends React.Component {
   }
 
   handleDelete(line_item) {
-    var line_items = this.state.line_items.slice().filter(function(li) { return li.id != line_item.id; } );
+    var index = this.state.line_items.indexOf(line_item);
+    var line_items = update(this.state.line_items, { $splice: [[index, 1]] } );
     this.setState({line_items: line_items});
   }
   
