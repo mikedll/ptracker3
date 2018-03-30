@@ -22,8 +22,7 @@ export default class LineItems extends React.Component {
   }
   
   addLineItem(line_item) {
-    var line_items = this.state.line_items;
-    line_items.push(line_item);
+    var line_items = update(this.state.line_items, {$push: [line_item]});
     this.setState({line_items: line_items});
   }
   
