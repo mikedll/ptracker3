@@ -6,7 +6,6 @@ export default class LineItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = { edit: false };
-    this.editState = {};
     this.handleDelete = this.handleDelete.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
