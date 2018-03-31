@@ -13,8 +13,17 @@ class LineItemsController < ApplicationController
     end
   end
 
+  def update
+    find_item
+    if @line_item.update(line_item_params)
+      render json: @line_item
+    else
+      head json: @line_item.errors, status: :unprocessible_entity
+    end
+  end
+
   def destroy
-    @line_item = LineItem.find(params[:id])
+    find_item
     @line_item.destroy
     head :no_content
   end
@@ -23,5 +32,9 @@ class LineItemsController < ApplicationController
 
   def line_item_params
     params.require(:line_item).permit(:title, :amount, :date)
+  end
+
+  def find_item
+    @line_item = LineItem.find(params[:id])
   end
 end

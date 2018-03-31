@@ -3,19 +3,16 @@ import React from 'react';
 export default class LineItemForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.getInitialState();
+    this.state = {
+      title: '',
+      date: '',
+      amount: ''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);    
   }
   
-  getInitialState() {
-    return {
-      title: '',
-      date: '',
-      amount: ''
-    };
-  }
   render() {
     return (
       <form className="form-inline" onSubmit={this.handleSubmit}>

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :line_items, :only => [:index, :create, :destroy]
+  resources :line_items, :only => [:index, :create, :update, :destroy]
 
   get 'welcome/index'
 

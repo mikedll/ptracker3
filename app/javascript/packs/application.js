@@ -11,11 +11,3 @@
 var componentRequireContext = require.context("components", true);
 var ReactRailsUJS = require("react_ujs");
 ReactRailsUJS.useContext(componentRequireContext);
-
-import update from 'immutability-helper';
-
-const state1 = ['x'];
-const state2 = update(state1, {$push: ['y']});
-
-console.log('Hello World from Webpacker');
-console.log(state2);

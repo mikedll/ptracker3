@@ -1,9 +1,9 @@
 import React from 'react';
 
-var HelloMessage = React.createReactClass({
+export default class HelloMessage extends React.Component {
   render: function() {
     return (
       <h3>Hello {this.props.name}.</h3>
     );
   }
-});
+}

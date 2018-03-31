@@ -13,11 +13,18 @@ export default class LineItems extends React.Component {
 
     this.addLineItem = this.addLineItem.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   handleDelete(line_item) {
     var index = this.state.line_items.indexOf(line_item);
     var line_items = update(this.state.line_items, { $splice: [[index, 1]] } );
+    this.setState({line_items: line_items});
+  }
+
+  handleUpdate(line_item, data) {
+    var index = this.state.line_items.indexOf(line_item);
+    var line_items = update(this.state.line_items, {$splice: [[index, 1, data]]});
     this.setState({line_items: line_items});
   }
   
@@ -42,7 +49,7 @@ export default class LineItems extends React.Component {
 
   render() {
     var $this = this; 
-    var lineItems = this.state.line_items.map(function(li){ return React.createElement(LineItem, {key: li.id, line_item: li, handleDeleteLineItem: $this.handleDelete});});
+    var lineItems = this.state.line_items.map(function(li){ return React.createElement(LineItem, {key: li.id, line_item: li, handleDeleteLineItem: $this.handleDelete, handleUpdateLineItem: $this.handleUpdate});});
     
     return (
       <div className="line_items">
@@ -56,10 +63,12 @@ export default class LineItems extends React.Component {
         <hr/>
         <table className="table table-bordered">
           <thead>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Actions</th>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
           </thead>
           <tbody>
             {lineItems}
