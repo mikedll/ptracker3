@@ -1,0 +1,4 @@
+%h3
+  = @purchase_order.title
+
+= react_component 'line_items', { data: @purchase_order.line_items }

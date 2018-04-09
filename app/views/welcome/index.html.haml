@@ -1,0 +1,8 @@
+%h1
+  Purchase Orders
+
+= react_component "purchase_orders", { data: @purchase_orders }
+
+%div
+  = link_to 'Manage Line Items', line_items_path
+
