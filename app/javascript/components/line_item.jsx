@@ -51,7 +51,7 @@ export default class LineItem extends React.Component {
 
   defaultAjax() {
     return {
-      url: '/line_items/' + this.props.line_item.id,
+      url: AppRoutes.lineItem(this.props.purchase_order.id, this.props.line_item.id),
       dataType: 'JSON'
     };
   }

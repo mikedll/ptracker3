@@ -42,7 +42,7 @@ export default class LineItemForm extends React.Component {
   handleSubmit(e) {
     var $this = this;
     e.preventDefault();
-    $.post('', { line_item: this.state }, function(data) {
+    $.post(AppRoutes.lineItems(this.props.purchaseOrderId), { line_item: this.state }, function(data) {
       $this.props.handleNewRecord(data);
       $this.setState({
         title: '',

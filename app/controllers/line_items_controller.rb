@@ -1,10 +1,8 @@
 class LineItemsController < ApplicationController
-  def index
-    @line_items = LineItem.all
-  end
 
   def create
-    @line_item = LineItem.new(line_item_params)
+    find_parent
+    @line_item = @parent.line_items.build(line_item_params)
 
     if @line_item.save
       render json: @line_item
@@ -34,7 +32,12 @@ class LineItemsController < ApplicationController
     params.require(:line_item).permit(:title, :amount, :date)
   end
 
+  def find_parent
+    @parent = PurchaseOrder.find(params[:purchase_order_id])
+  end
+
   def find_item
-    @line_item = LineItem.find(params[:id])
+    find_parent
+    @line_item = @parent.line_items.find(params[:id]) if params[:id]
   end
 end

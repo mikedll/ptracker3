@@ -8,7 +8,8 @@ export default class LineItems extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      line_items: this.props.data
+      line_items: this.props.data,
+      purchase_order: this.props.purchase_order
     };
 
     this.addLineItem = this.addLineItem.bind(this);
@@ -49,7 +50,9 @@ export default class LineItems extends React.Component {
 
   render() {
     var $this = this; 
-    var lineItems = this.state.line_items.map(function(li){ return React.createElement(LineItem, {key: li.id, line_item: li, handleDeleteLineItem: $this.handleDelete, handleUpdateLineItem: $this.handleUpdate});});
+    var lineItems = this.state.line_items.map(function(li) {
+      return <LineItem key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate}/>;
+    });
     
     return (
       <div className="line_items">
@@ -59,7 +62,7 @@ export default class LineItems extends React.Component {
           {React.createElement(AmountBox, {type: 'danger', amount: this.debits(), text: "Debit"})}
           {React.createElement(AmountBox, {type: 'info', amount: this.balance(), text: "Balance"})}
         </div>
-        {React.createElement(LineItemForm, {handleNewRecord: this.addLineItem})}
+        <LineItemForm handleNewRecord={this.addLineItem} purchaseOrderId={this.state.purchase_order.id}/>
         <hr/>
         <table className="table table-bordered">
           <thead>
@@ -78,7 +81,3 @@ export default class LineItems extends React.Component {
     );
   }
 }
-
-LineItems.defaultProps = {
-  line_items: []
-};

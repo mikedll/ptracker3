@@ -21,7 +21,7 @@ export default class PurchaseOrder extends React.Component {
     return (
       <div>
         <h3>{this.props.purchase_order.title}</h3>
-        <LineItems data={this.props.purchase_order.line_items}/>;
+        <LineItems data={this.props.purchase_order.line_items} purchase_order={this.props.purchase_order}/>;
       </div>
     );
   }
