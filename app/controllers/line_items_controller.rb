@@ -5,7 +5,7 @@ class LineItemsController < ApplicationController
     @line_item = @parent.line_items.build(line_item_params)
 
     if @line_item.save
-      render json: @line_item
+      render json: @line_item.as_json(include: :purchase_order)
     else
       render json: @line_item.errors, status: :unprocessible_entity
     end
@@ -14,7 +14,7 @@ class LineItemsController < ApplicationController
   def update
     find_item
     if @line_item.update(line_item_params)
-      render json: @line_item
+      render json: @line_item.as_json(include: :purchase_order)
     else
       head json: @line_item.errors, status: :unprocessible_entity
     end
@@ -23,7 +23,7 @@ class LineItemsController < ApplicationController
   def destroy
     find_item
     @line_item.destroy
-    head :no_content
+    render json: @parent
   end
 
   private

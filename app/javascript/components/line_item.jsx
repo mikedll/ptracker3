@@ -29,8 +29,8 @@ export default class LineItem extends React.Component {
     var $this = this;
     $.ajax(Object.assign(this.defaultAjax(), {
       method: 'DELETE',
-      success: function() {
-        return $this.props.handleDeleteLineItem($this.props.line_item);
+      success: function(data) {
+        return $this.props.handleDeleteLineItem($this.props.line_item, data);
       }
     }));
   }

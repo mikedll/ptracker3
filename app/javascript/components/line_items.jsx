@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 import LineItem from './line_item';
 import LineItemForm from './line_item_form';
 import AmountBox from './amount_box';
+import _ from 'underscore';
 
 export default class LineItems extends React.Component {
   constructor(props) {
@@ -17,35 +18,25 @@ export default class LineItems extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this);
   }
 
-  handleDelete(line_item) {
+  handleDelete(line_item, data) {
     var index = this.state.line_items.indexOf(line_item);
     var line_items = update(this.state.line_items, { $splice: [[index, 1]] } );
-    this.setState({line_items: line_items});
+    this.setState({line_items: line_items, purchase_order: data});
   }
 
   handleUpdate(line_item, data) {
     var index = this.state.line_items.indexOf(line_item);
-    var line_items = update(this.state.line_items, {$splice: [[index, 1, data]]});
-    this.setState({line_items: line_items});
+    var line_items = update(this.state.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
+    this.setState({line_items: line_items, purchase_order: data.purchase_order});
   }
   
   addLineItem(line_item) {
-    var line_items = update(this.state.line_items, {$push: [line_item]});
-    this.setState({line_items: line_items});
+    var line_items = update(this.state.line_items, {$push: [_.omit(line_item, 'purchase_order')]});
+    this.setState({line_items: line_items, purchase_order: line_item.purchase_order});
   }
   
-  credits() {
-    var credits = this.state.line_items.filter(function(val) { return val.amount > 0; });
-    return credits.reduce(function(prev, cur) { return prev + parseFloat(cur.amount); }, 0);
-  }
-
-  debits() {
-    var credits = this.state.line_items.filter(function(val) { return val.amount < 0; });
-    return credits.reduce(function(prev, cur) { return prev + parseFloat(cur.amount); }, 0);
-  }
-
-  balance() {
-    return this.debits() + this.credits();
+  total() {
+    return this.state.purchase_order.total;
   }
 
   render() {
@@ -56,12 +47,7 @@ export default class LineItems extends React.Component {
     
     return (
       <div className="line_items">
-        <h2 className="title"> Line Items </h2>
-        <div className="row">
-          {React.createElement(AmountBox, {type: 'success', amount: this.credits(), text: "Credit"})}
-          {React.createElement(AmountBox, {type: 'danger', amount: this.debits(), text: "Debit"})}
-          {React.createElement(AmountBox, {type: 'info', amount: this.balance(), text: "Balance"})}
-        </div>
+        <h4 className="title"> Line Items </h4>
         <LineItemForm handleNewRecord={this.addLineItem} purchaseOrderId={this.state.purchase_order.id}/>
         <hr/>
         <table className="table table-bordered">
@@ -77,6 +63,11 @@ export default class LineItems extends React.Component {
             {lineItems}
           </tbody>
         </table>
+        <div className="row">
+          <div className="col-md-4"/>
+          <div className="col-md-4"/>
+          <AmountBox type='info' amount={this.total()} text="Total"/>
+        </div>
       </div>
     );
   }

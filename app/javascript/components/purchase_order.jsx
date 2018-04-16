@@ -20,6 +20,8 @@ export default class PurchaseOrder extends React.Component {
   asDetailed() {
     return (
       <div>
+        <a href={AppRoutes.root}>Purchase Orders</a>
+        <br/>
         <h3>{this.props.purchase_order.title}</h3>
         <LineItems data={this.props.purchase_order.line_items} purchase_order={this.props.purchase_order}/>;
       </div>
