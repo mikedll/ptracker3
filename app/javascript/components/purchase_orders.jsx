@@ -11,7 +11,7 @@ export default class PurchaseOrders extends React.Component {
 
   render() {
     var purchaseOrders = this.state.purchase_orders.map(function(po) {
-      return <PurchaseOrder key={po.id} purchase_order={po}/>;
+      return <PurchaseOrder key={po.id} purchase_order={po} row={true}/>;
     });
     
     return (
