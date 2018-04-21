@@ -14,14 +14,14 @@ ActiveRecord::Schema.define(version: 20180421015231) do
 
   create_table "items", force: :cascade do |t|
     t.string "name", default: "", null: false
-    t.decimal "unit_price", default: "0.0", null: false
+    t.decimal "unit_price", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "line_items", force: :cascade do |t|
     t.datetime "added_at", null: false
-    t.decimal "price", default: "0.0", null: false
+    t.decimal "price", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "purchase_order_id"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20180421015231) do
   create_table "purchase_orders", force: :cascade do |t|
     t.string "title"
     t.datetime "date"
-    t.decimal "total", default: "0.0", null: false
+    t.decimal "total", precision: 8, scale: 2, default: "0.0", null: false
   end
 
 end

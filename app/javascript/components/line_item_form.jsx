@@ -18,7 +18,7 @@ export default class LineItemForm extends React.Component {
 
   price () {
     if (!this.state.item || !this.state.quantity) return null;
-    return this.state.quantity * this.state.item.unit_price;
+    return parseFloat(this.state.quantity) * this.state.item.unit_price;
   }
 
   render() {
@@ -56,13 +56,12 @@ export default class LineItemForm extends React.Component {
     const target = e.target;
     var value = target.value;
     const name = target.name;
-    if(name == 'quantity' && value != '') value = parseFloat(value);
     this.setState((prevState) =>
                   update(prevState, {[name]: {$set: value}})
                  );
   }
   valid() {
-    return this.state.item_id && this.state.added_at && this.state.quantity;
+    return this.state.item_id && this.state.added_at && this.state.quantity && !isNaN(parseFloat(this.state.quantity));
   }
   handleSubmit(e) {
     var $this = this;
