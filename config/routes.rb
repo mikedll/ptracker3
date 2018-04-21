@@ -4,6 +4,11 @@ Rails.application.routes.draw do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
+  resources :items, :only => [] do
+    collection do
+      get :autocomplete
+    end
+  end
   get 'welcome/index'
 
   root 'welcome#index'

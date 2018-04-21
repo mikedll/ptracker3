@@ -1,6 +1,7 @@
 
 var AppRoutes = {
   root: '/',
+  itemsAutocomplete: '/items/autocomplete',
   purchaseOrders: '/purchase_orders',
   lineItems: function(po_id) {
     return '/purchase_orders/' + po_id + '/line_items';
