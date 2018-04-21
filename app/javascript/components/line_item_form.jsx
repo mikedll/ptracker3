@@ -18,25 +18,25 @@ export default class LineItemForm extends React.Component {
 
   price () {
     if (!this.state.item || !this.state.quantity) return null;
-    return parseFloat(this.state.quantity) * this.state.item.unit_price;
+    return amountFormat(Math.round((parseFloat(this.state.quantity) * this.state.item.unit_price) * 100) / 100);
   }
 
   render() {
     return (
       <form className="form-inline new-line-item-form" onSubmit={this.handleSubmit}>
-        <div className="form-group">
+        <div className="form-group mb-2 mr-sm-2">
           <input type="text" className="form-control" placeholder="Item" name="item_search"/>
         </div>
-        <div className="form-group">
+        <div className="form-group mb-2 mr-sm-2">
           <input type="text" className="form-control" placeholder="Date" value={this.state.added_at} name="added_at" onChange={this.handleChange}/>
         </div>
-        <div className="form-group">
+        <div className="form-group mb-2 mr-sm-2">
           <input type="text" className="form-control" placeholder="Quantity" value={this.state.quantity} name="quantity" onChange={this.handleChange}/>
         </div>
-        <div className="form-group">
+        <div className="form-group mb-2 mr-sm-2">
           <strong>{this.price()}</strong>
         </div>
-        <button type="submit" className="btn btn-primary" disabled={!this.valid()}>Create line item</button>
+        <button type="submit" className="btn btn-primary mb-2" disabled={!this.valid()}>Create line item</button>
       </form>
     );
   }
@@ -69,9 +69,10 @@ export default class LineItemForm extends React.Component {
     $.post(AppRoutes.lineItems(this.props.purchaseOrderId), { line_item: this.state }, function(data) {
       $this.props.handleNewRecord(data);
       $this.setState({
-        title: '',
-        date: '',
-        amount: ''
+        item: null,
+        item_id: '',
+        added_at: '',
+        quantity: ''
       });
       }, 'JSON');
   }
