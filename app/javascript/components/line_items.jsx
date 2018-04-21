@@ -19,20 +19,26 @@ export default class LineItems extends React.Component {
   }
 
   handleDelete(line_item, data) {
-    var index = this.state.line_items.indexOf(line_item);
-    var line_items = update(this.state.line_items, { $splice: [[index, 1]] } );
-    this.setState({line_items: line_items, purchase_order: data});
+    this.setState(function(prevState) {
+      var index = prevState.line_items.indexOf(line_item);
+      var line_items = update(prevState.line_items, { $splice: [[index, 1]] } );
+      return {line_items: line_items, purchase_order: data};
+    });
   }
 
   handleUpdate(line_item, data) {
-    var index = this.state.line_items.indexOf(line_item);
-    var line_items = update(this.state.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
-    this.setState({line_items: line_items, purchase_order: data.purchase_order});
+    this.setState(function(prevState) {
+      var index = prevState.line_items.indexOf(line_item);
+      var line_items = update(prevState.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
+      return {line_items: line_items, purchase_order: data.purchase_order};
+    });
   }
   
   addLineItem(line_item) {
-    var line_items = update(this.state.line_items, {$push: [_.omit(line_item, 'purchase_order')]});
-    this.setState({line_items: line_items, purchase_order: line_item.purchase_order});
+    this.setState(function(prevState) {
+      var line_items = update(prevState.line_items, {$push: [_.omit(line_item, 'purchase_order')]});
+      return {line_items: line_items, purchase_order: line_item.purchase_order};
+    });
   }
   
   total() {
@@ -53,9 +59,10 @@ export default class LineItems extends React.Component {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Title</th>
-              <th>Amount</th>
+              <th>Date Added</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
               <th>Actions</th>
             </tr>
           </thead>

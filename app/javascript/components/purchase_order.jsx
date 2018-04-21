@@ -11,7 +11,7 @@ export default class PurchaseOrder extends React.Component {
     return (
       <tr>
         <td>{this.props.purchase_order.title}</td>
-        <td>{moment(this.props.purchase_order.date).format('MMMM Do YYYY, h:mm a')}</td>
+        <td>{moment(this.props.purchase_order.date).format(MomentFormats.Time)}</td>
         <td><a href={'/purchase_orders/' + this.props.purchase_order.id}>View</a></td>
       </tr>
     );

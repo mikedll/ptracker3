@@ -1,1 +1,1 @@
-= react_component 'purchase_order', { purchase_order: @purchase_order.as_json(include: :line_items) }
+= react_component 'purchase_order', { purchase_order: @purchase_order.as_json(include: {line_items: {include: :item} }) }

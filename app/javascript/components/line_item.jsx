@@ -1,6 +1,7 @@
 import React from 'react';
 import update from 'immutability-helper';
 import _ from 'underscore';
+import moment from 'moment';
 
 export default class LineItem extends React.Component {
   constructor(props) {
@@ -14,13 +15,14 @@ export default class LineItem extends React.Component {
 
   handleToggle(e) {
     e.preventDefault();
-    this.setState({edit: !this.state.edit});
+    this.setState((prevState) => ({edit: !prevState.edit}));
   }
 
   handleChange(e) {
     const target = e.target;
-    const value = target.value;
+    var value = target.value;
     const name = target.name;
+    if(name == 'quantity') value = parseFloat(value);
     this.setState(update(this.state, {[name]: {$set: value}}));
   }
   
@@ -40,7 +42,7 @@ export default class LineItem extends React.Component {
     var $this = this;
     var params = Object.assign(this.defaultAjax(), {
       method: 'PUT',
-      data: {line_item: _.pick(this.state, 'date', 'title', 'amount')},
+      data: {line_item: _.pick(this.state, 'item_id', 'added_at', 'quantity')},
       success: function(data) {
         $this.setState({edit: false});
         $this.props.handleUpdateLineItem($this.props.line_item, data);
@@ -59,9 +61,10 @@ export default class LineItem extends React.Component {
   line_item_row() {
     return (
       <tr>
-        <td>{this.props.line_item.date}</td>
-        <td>{this.props.line_item.title}</td>
-        <td>{amountFormat(this.props.line_item.amount)}</td>
+        <td>{moment(this.props.line_item.added_at).format(MomentFormats.Time)}</td>
+        <td>{this.props.line_item.item.name}</td>
+        <td>{this.props.line_item.quantity}</td>
+        <td>{amountFormat(this.props.line_item.price)}</td>
         <td>
           <a className="btn btn-secondary" onClick={this.handleToggle}>Edit</a>
           <a className="btn btn-danger" onClick={this.handleDelete}>Delete</a>
@@ -73,9 +76,10 @@ export default class LineItem extends React.Component {
   line_item_form() {
     return (
       <tr>
-        <td><input className="form-control" type="text" name="date" defaultValue={this.props.line_item.date} onChange={this.handleChange}/></td>
-        <td><input className="form-control" type="text" name="title" defaultValue={this.props.line_item.title} onChange={this.handleChange}/></td>
-        <td><input className="form-control" type="text" name="amount" defaultValue={this.props.line_item.amount} onChange={this.handleChange}/></td>
+        <td><input className="form-control" type="text" name="added_at" defaultValue={this.props.line_item.added_at} onChange={this.handleChange}/></td>
+        <td><input className="form-control" type="text" name="item_id" defaultValue={this.props.line_item.item_id} onChange={this.handleChange}/></td>
+
+        <td><input className="form-control" type="text" name="quantity" defaultValue={this.props.line_item.quantity} onChange={this.handleChange}/></td>
         <td>
           <a className="btn btn-secondary" onClick={this.handleEdit}>Edit</a>
           <a className="btn btn-danger" onClick={this.handleToggle}>Cancel</a>
