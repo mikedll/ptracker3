@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import LineItem from './line_item';
+import LineItemRow from './line_item_row';
 import LineItemForm from './line_item_form';
 import AmountBox from './amount_box';
 import _ from 'underscore';
@@ -48,7 +48,7 @@ export default class LineItems extends React.Component {
   render() {
     var $this = this; 
     var lineItems = this.state.line_items.map(function(li) {
-      return <LineItem key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate}/>;
+      return <LineItemRow key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate}/>;
     });
     
     return (

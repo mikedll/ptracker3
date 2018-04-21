@@ -17,8 +17,8 @@ export default class LineItemForm extends React.Component {
   }
 
   price () {
-    if (!this.state.item || !this.state.quantity) return null;
-    return amountFormat(Math.round((parseFloat(this.state.quantity) * this.state.item.unit_price) * 100) / 100);
+    var li = new LineItem(this.state.item, this.state.quantity);
+    return li.price();
   }
 
   render() {
