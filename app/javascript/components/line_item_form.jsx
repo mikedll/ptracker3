@@ -41,17 +41,13 @@ export default class LineItemForm extends React.Component {
     );
   }
   handleChange(e) {
-    const target = e.target.name;
+    const target = e.target;
     var value = target.value;
     const name = target.name;
     if(name == 'quantity') value = parseFloat(value);
-    var newVals = {};
-    newVals[name] = e.target.value;
-    this.setState(newVals);
-    
-    // this.setState((prevState) =>
-    //               update(prevState, {[name]: {$set: value}})
-    //              );
+    this.setState((prevState) =>
+                  update(prevState, {[name]: {$set: value}})
+                 );
   }
   valid() {
     return this.state.item_id && this.state.added_at && this.state.quantity;
