@@ -12,7 +12,7 @@ export default class PurchaseOrder extends React.Component {
       <tr>
         <td>{this.props.purchase_order.title}</td>
         <td>{moment(this.props.purchase_order.date).format(MomentFormats.Time)}</td>
-        <td><a href={'/purchase_orders/' + this.props.purchase_order.id}>View</a></td>
+        <td><a href={AppRoutes.purchaseOrders + '/' + this.props.purchase_order.id} className="btn btn-secondary">View</a></td>
       </tr>
     );
   }

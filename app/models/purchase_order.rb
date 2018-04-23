@@ -1,6 +1,6 @@
 class PurchaseOrder < ApplicationRecord
 
-  has_many :line_items
+  has_many :line_items, :dependent => :destroy
 
   scope :with_line_items, -> { includes(line_items: [:item]) }
 

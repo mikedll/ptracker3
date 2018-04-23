@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :purchase_orders, :only => [:show] do
+  resources :purchase_orders, :only => [:show, :create] do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
