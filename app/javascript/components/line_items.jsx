@@ -2,7 +2,6 @@ import React from 'react';
 import update from 'immutability-helper';
 import LineItemRow from './line_item_row';
 import LineItemForm from './line_item_form';
-import AmountBox from './amount_box';
 import _ from 'underscore';
 
 export default class LineItems extends React.Component {
@@ -93,13 +92,14 @@ export default class LineItems extends React.Component {
           </thead>
           <tbody>
             {lineItems}
+            <tr className="total-line">
+              <td colSpan="2"></td>
+              <td className="total-label">Total:</td>              
+              <td className="total">{amountFormat(this.total())}</td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
-        <div className="row">
-          <div className="col-md-4"/>
-          <div className="col-md-4"/>
-          <AmountBox type='info' amount={this.total()} text="Total"/>
-        </div>
       </div>
     );
   }
