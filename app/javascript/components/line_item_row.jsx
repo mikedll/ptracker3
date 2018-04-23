@@ -15,9 +15,12 @@ export default class LineItemRow extends React.Component {
 
   handleToggle(e) {
     e.preventDefault();
-    this.setState(function(prevState, props) {
+    this.setState((prevState, props) => {
       var newState = {edit: !prevState.edit};
+      this.props.handleModeChange(this.props.line_item, newState.edit);
+      
       if (newState.edit && !prevState.quantity) newState['quantity'] = props.line_item.quantity;
+
       return newState;
     });
   }

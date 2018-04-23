@@ -10,12 +10,14 @@ export default class LineItems extends React.Component {
     super(props);
     this.state = {
       line_items: this.props.data,
-      purchase_order: this.props.purchase_order
+      purchase_order: this.props.purchase_order,
+      lineItemsInEditMode: []
     };
 
     this.addLineItem = this.addLineItem.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleModeChange = this.handleModeChange.bind(this);
   }
 
   handleDelete(line_item, data) {
@@ -26,12 +28,35 @@ export default class LineItems extends React.Component {
     });
   }
 
-  handleUpdate(line_item, data) {
-    this.setState(function(prevState) {
-      var index = prevState.line_items.indexOf(line_item);
-      var line_items = update(prevState.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
-      return {line_items: line_items, purchase_order: data.purchase_order};
+  /*
+   * Updates line item data here, and removes
+   * the editing flag for that line item.
+   */
+  handleUpdate(lineItem, data) {
+    this.setState((prevState) => {
+      const index = prevState.line_items.indexOf(lineItem);
+      const line_items = update(prevState.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
+      return {
+        line_items: line_items,
+        purchase_order: data.purchase_order,
+        lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem)};
     });
+  }
+
+  stateWithoutEditFlag(prevState, lineItem) {
+    let l = update(prevState.lineItemsInEditMode, {$splice: [[prevState.lineItemsInEditMode.indexOf(lineItem.id), 1]]});
+    return l;
+  }
+  
+  handleModeChange(lineItem, isEditing) {
+    if(isEditing)
+      this.setState(prevState => {
+        return { lineItemsInEditMode: update(prevState.lineItemsInEditMode, {$push: [lineItem.id]}) };
+      });
+    else
+      this.setState(prevState => {
+        return {lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem)};
+      });
   }
   
   addLineItem(line_item) {
@@ -42,13 +67,13 @@ export default class LineItems extends React.Component {
   }
   
   total() {
-    return this.state.purchase_order.total;
+    return (this.state.lineItemsInEditMode.length == 0) ? this.state.purchase_order.total : null;
   }
 
   render() {
     var $this = this; 
     var lineItems = this.state.line_items.map(function(li) {
-      return <LineItemRow key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate}/>;
+      return <LineItemRow key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate} handleModeChange={$this.handleModeChange}/>;
     });
     
     return (
