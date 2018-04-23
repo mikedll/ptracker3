@@ -16,7 +16,8 @@ export default class LineItemRow extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+    this.handleEditButton = this.handleEditButton.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   bindAutocomplete() {
@@ -78,8 +79,14 @@ export default class LineItemRow extends React.Component {
     }));
   }
 
-  handleEdit(e) {
-    e.preventDefault();    
+  defaultAjax() {
+    return {
+      url: AppRoutes.lineItem(this.props.purchase_order.id, this.props.line_item.id),
+      dataType: 'JSON'
+    };
+  }
+
+  handleEdit() {
     var $this = this;
     $.ajax(Object.assign(this.defaultAjax(), {
       method: 'PUT',
@@ -90,16 +97,21 @@ export default class LineItemRow extends React.Component {
         $this.setState(Object.assign({edit: false}, _.pick(data, 'item', 'item_id', 'added_at', 'quantity')));
         $this.props.handleUpdateLineItem($this.props.line_item, data);
       }
-    }));
+    }));    
+  }
+  
+  handleEditButton(e) {
+    e.preventDefault();
+    this.handleEdit();
   }
 
-  defaultAjax() {
-    return {
-      url: AppRoutes.lineItem(this.props.purchase_order.id, this.props.line_item.id),
-      dataType: 'JSON'
-    };
+  handleKeyPress(e) {
+    if(e.key == 'Enter') {
+      e.preventDefault();
+      this.handleEdit();
+    }
   }
-
+  
   price() {
     var li = new LineItem(this.state.item, this.state.quantity);
     return li.price();
@@ -123,12 +135,12 @@ export default class LineItemRow extends React.Component {
   line_item_form() {
     return (
       <tr ref={el => this.el = el}>
-        <td><input className="form-control" type="text" name="added_at" placeholder="Date" defaultValue={this.state.added_at} onChange={this.handleChange}/></td>
-        <td><input className="form-control" type="text" name="item_search" placeholder="Item" defaultValue={this.props.line_item.item.name}/></td>
-        <td><input className="form-control" type="text" name="quantity" placeholder="Quantity" defaultValue={this.state.quantity} onChange={this.handleChange}/></td>
+        <td><input className="form-control" type="text" name="added_at" placeholder="Date" defaultValue={this.state.added_at} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></td>
+        <td><input className="form-control" type="text" name="item_search" placeholder="Item" defaultValue={this.props.line_item.item.name} onKeyPress={this.handleKeyPress}/></td>
+        <td><input className="form-control" type="text" name="quantity" placeholder="Quantity" defaultValue={this.state.quantity} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></td>
         <td>{this.price()}</td>
         <td>
-          <a className="btn btn-secondary" onClick={this.handleEdit}>Edit</a>
+          <a className="btn btn-secondary" onClick={this.handleEditButton}>Edit</a>
           <a className="btn btn-danger" onClick={this.handleToggle}>Cancel</a>
         </td>
       </tr>
