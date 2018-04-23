@@ -6,13 +6,45 @@ import moment from 'moment';
 export default class LineItemRow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit: false };
+    this.state = {
+      edit: false,
+      item: props.line_item.item,
+      item_id: this.props.line_item.item.id,
+      added_at: this.props.line_item.added_at,
+      quantity: this.props.line_item.quantity
+    };
     this.handleDelete = this.handleDelete.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
   }
 
+  bindAutocomplete() {
+    var $this = this;
+    $(this.el).find('input[name=item_search]').autocomplete({
+      source: AppRoutes.itemsAutocomplete,
+      minLength: 2,
+      select: function(event, ui) {
+        event.preventDefault();
+        event.target.value = ui.item.value.name;
+        $this.setState({item: ui.item.value, item_id: ui.item.value.id});
+      }
+    });    
+  }
+
+  unbindAutocomplete() {
+    $(this.el).find('input[name=item_search]').autocomplete('destroy');    
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if(!prevState.edit && this.state.edit) this.bindAutocomplete();
+    else if(prevState.edit && !this.state.edit) this.unbindAutocomplete();
+  }
+  
+  componentWillUnmount() {
+    if(this.state.edit) this.unbindAutocomplete();
+  }
+  
   handleToggle(e) {
     e.preventDefault();
     this.setState((prevState, props) => {
@@ -65,7 +97,7 @@ export default class LineItemRow extends React.Component {
   }
 
   price() {
-    var li = new LineItem(this.props.line_item.item, this.state.quantity);
+    var li = new LineItem(this.state.item, this.state.quantity);
     return li.price();
   }
   
@@ -86,10 +118,10 @@ export default class LineItemRow extends React.Component {
 
   line_item_form() {
     return (
-      <tr>
-        <td><input className="form-control" type="text" name="added_at" defaultValue={this.props.line_item.added_at} onChange={this.handleChange}/></td>
-        <td><input className="form-control" type="text" name="item_id" defaultValue={this.props.line_item.item_id} onChange={this.handleChange}/></td>
-        <td><input className="form-control" type="text" name="quantity" defaultValue={this.props.line_item.quantity} onChange={this.handleChange}/></td>
+      <tr ref={el => this.el = el}>
+        <td><input className="form-control" type="text" name="added_at" placeholder="Date" defaultValue={this.state.added_at} onChange={this.handleChange}/></td>
+        <td><input className="form-control" type="text" name="item_search" placeholder="Item" defaultValue={this.props.line_item.item.name}/></td>
+        <td><input className="form-control" type="text" name="quantity" placeholder="Quantity" defaultValue={this.state.quantity} onChange={this.handleChange}/></td>
         <td>{this.price()}</td>
         <td>
           <a className="btn btn-secondary" onClick={this.handleEdit}>Edit</a>
