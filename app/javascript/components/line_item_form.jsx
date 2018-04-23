@@ -69,10 +69,10 @@ export default class LineItemForm extends React.Component {
     return (
       <form ref={el => this.el = el} className="form-inline" onSubmit={this.handleSubmit}>
         <div className="form-group mb-2 mr-sm-2">
-          <input type="text" className="form-control" placeholder="Item" name="item_search"/>
+          <input type="text" className="form-control" placeholder="Date" value={this.state.added_at} name="added_at" onChange={this.handleChange}/>
         </div>
         <div className="form-group mb-2 mr-sm-2">
-          <input type="text" className="form-control" placeholder="Date" value={this.state.added_at} name="added_at" onChange={this.handleChange}/>
+          <input type="text" className="form-control" placeholder="Item" name="item_search"/>
         </div>
         <div className="form-group mb-2 mr-sm-2">
           <input type="text" className="form-control" placeholder="Quantity" value={this.state.quantity} name="quantity" onChange={this.handleChange}/>
