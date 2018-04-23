@@ -8,7 +8,7 @@ export default class LineItemRow extends React.Component {
     super(props);
     this.state = {
       edit: false,
-      item: props.line_item.item,
+      item: this.props.line_item.item,
       item_id: this.props.line_item.item.id,
       added_at: this.props.line_item.added_at,
       quantity: this.props.line_item.quantity
@@ -38,7 +38,6 @@ export default class LineItemRow extends React.Component {
   
   componentDidUpdate(prevProps, prevState) {
     if(!prevState.edit && this.state.edit) this.bindAutocomplete();
-    else if(prevState.edit && !this.state.edit) this.unbindAutocomplete();
   }
   
   componentWillUnmount() {
@@ -47,6 +46,10 @@ export default class LineItemRow extends React.Component {
   
   handleToggle(e) {
     e.preventDefault();
+
+    // This is a strange place to unbind, but componentDidUpdate is too late.
+    if(this.state.edit) this.unbindAutocomplete();
+    
     this.setState((prevState, props) => {
       var newState = {edit: !prevState.edit};
       this.props.handleModeChange(this.props.line_item, newState.edit);
@@ -78,15 +81,16 @@ export default class LineItemRow extends React.Component {
   handleEdit(e) {
     e.preventDefault();    
     var $this = this;
-    var params = Object.assign(this.defaultAjax(), {
+    $.ajax(Object.assign(this.defaultAjax(), {
       method: 'PUT',
       data: {line_item: _.pick(this.state, 'item_id', 'added_at', 'quantity')},
       success: function(data) {
-        $this.setState({edit: false});
+        // componentDidUpdate is too late for this unbind
+        $this.unbindAutocomplete();
+        $this.setState(Object.assign({edit: false}, _.pick(data, 'item', 'item_id', 'added_at', 'quantity')));
         $this.props.handleUpdateLineItem($this.props.line_item, data);
       }
-    });
-    $.ajax(params);
+    }));
   }
 
   defaultAjax() {
