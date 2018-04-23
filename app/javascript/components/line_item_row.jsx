@@ -20,7 +20,7 @@ export default class LineItemRow extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  bindAutocomplete() {
+  bindUIDecorators() {
     var $this = this;
     $(this.el).find('input[name=item_search]').autocomplete({
       source: AppRoutes.itemsAutocomplete,
@@ -31,25 +31,32 @@ export default class LineItemRow extends React.Component {
         $this.setState({item: ui.item.value, item_id: ui.item.value.id});
       }
     });    
+    $(this.el).find('input[name=added_at]').datepicker({
+      onSelect: (dateText) => {
+        this.setState({added_at: dateText});
+      },
+      dateFormat: 'yy-mm-dd'
+    });
   }
 
-  unbindAutocomplete() {
+  unbindUIDecorators() {
     $(this.el).find('input[name=item_search]').autocomplete('destroy');    
+    $(this.el).find("input[name=added_at]").datepicker('destroy');
   }
   
   componentDidUpdate(prevProps, prevState) {
-    if(!prevState.edit && this.state.edit) this.bindAutocomplete();
+    if(!prevState.edit && this.state.edit) this.bindUIDecorators();
   }
   
   componentWillUnmount() {
-    if(this.state.edit) this.unbindAutocomplete();
+    if(this.state.edit) this.unbindUIDecorators();
   }
   
   handleToggle(e) {
     e.preventDefault();
 
     // This is a strange place to unbind, but componentDidUpdate is too late.
-    if(this.state.edit) this.unbindAutocomplete();
+    if(this.state.edit) this.unbindUIDecorators();
     
     this.setState((prevState, props) => {
       var newState = {edit: !prevState.edit};
@@ -93,7 +100,7 @@ export default class LineItemRow extends React.Component {
       data: {line_item: _.pick(this.state, 'item_id', 'added_at', 'quantity')},
       success: function(data) {
         // componentDidUpdate is too late for this unbind
-        $this.unbindAutocomplete();
+        $this.unbindUIDecorators();
         $this.setState(Object.assign({edit: false}, _.pick(data, 'item', 'item_id', 'added_at', 'quantity')));
         $this.props.handleUpdateLineItem($this.props.line_item, data);
       }

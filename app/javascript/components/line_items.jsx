@@ -77,7 +77,7 @@ export default class LineItems extends React.Component {
     
     return (
       <div className="line_items">
-        <h4 className="title"> Line Items </h4>
+        <div><strong> Line Items </strong></div>
         <LineItemForm handleNewRecord={this.addLineItem} purchaseOrderId={this.state.purchase_order.id}/>
         <hr/>
         <table className="table table-bordered">

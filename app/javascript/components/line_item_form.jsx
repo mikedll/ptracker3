@@ -35,15 +35,23 @@ export default class LineItemForm extends React.Component {
         $this.setState({item: ui.item.value, item_id: ui.item.value.id});
       }
     });
+
+    this.$el.find("input[name=added_at]").datepicker({
+      onSelect: (dateText) => {
+        this.setState({added_at: dateText});
+      },
+      dateFormat: 'yy-mm-dd'
+    });
   }
   
   componentWillUnmount() {
     this.$el.find('input[name=item_search]').autocomplete('destroy');
+    this.$el.find("input[name=added_at]").datepicker('destroy');
   }
   
   handleChange(e) {
     const target = e.target;
-    var value = target.value;
+    const value = target.value;
     const name = target.name;
     this.setState((prevState) =>
                   update(prevState, {[name]: {$set: value}})
