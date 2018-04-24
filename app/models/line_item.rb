@@ -1,5 +1,5 @@
 class LineItem < ApplicationRecord
-  belongs_to :purchase_order
+  belongs_to :purchase_order, :inverse_of => 'line_items'
   belongs_to :item
 
   before_save :_calculate_price

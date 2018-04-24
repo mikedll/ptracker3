@@ -56,6 +56,9 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
+    bootstrap4-kaminari-views (1.0.0)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     builder (3.2.3)
     byebug (10.0.0)
     capybara (2.18.0)
@@ -82,6 +85,8 @@ GEM
     erubi (1.7.1)
     erubis (2.7.0)
     execjs (2.7.0)
+    faker (1.8.7)
+      i18n (>= 0.7)
     ffi (1.9.23)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -247,10 +252,12 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.1.0)
   bootstrap
+  bootstrap4-kaminari-views
   byebug
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  faker
   haml-rails
   jbuilder (~> 2.5)
   jquery-rails

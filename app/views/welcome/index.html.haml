@@ -2,5 +2,9 @@
   Purchase Orders
   
 = react_component "purchase_orders", { data: @purchase_orders }
+
+.container
+  = paginate @purchase_orders, theme: 'twitter-bootstrap-4'
+
 = link_to "New Purchase Order", purchase_orders_path, :method => :post, :class => ["btn btn-primary"]
 

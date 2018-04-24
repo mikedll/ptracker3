@@ -36,3 +36,24 @@ po2 = PurchaseOrder.create(:title => "Second Purchase Order", :date => Time.now 
   po2.line_items.create(p)
 end
 
+# Hardcore creation.
+800.times do |i|
+  Item.create!({:name => "#{Faker::Commerce.product_name} #{i}", :unit_price => Faker::Commerce.price})
+end
+
+50.times do |i|
+  po_time = Faker::Time.backward(50, (rand > 0.8) ? :night : :day)
+  po = PurchaseOrder.create!({
+      :title => "#{Faker::Address.city} #{Faker::Number.between(10,25)}",
+      :date => po_time
+    })
+
+  rand(8).times do |i|
+    po.line_items.create!({
+        :item => Item.find((Item.connection.execute 'SELECT id FROM items ORDER BY RANDOM() LIMIT 1').first["id"]),
+        :quantity => Faker::Number.decimal(i % 2 == 0 ? 1 : 2, rand(2) == 1 ? 1 : 0),
+        :added_at => Faker::Time.between(po_time - 25.minutes, po_time, :between)
+      })
+  end
+end
+
