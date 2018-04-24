@@ -4,6 +4,7 @@ class PurchaseOrder < ApplicationRecord
 
   has_many :line_items, :inverse_of => 'purchase_order', :dependent => :destroy
 
+  scope :ordered, -> { order(:created_at) }
   scope :with_line_items, -> { includes(line_items: [:item]) }
 
   def cache_total

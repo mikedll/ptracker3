@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    @purchase_orders = PurchaseOrder.page(params[:page] || 1).per(10)
+    @purchase_orders = PurchaseOrder.ordered.page(params[:page] || 1)
   end
 end

@@ -15,12 +15,12 @@ export default class PurchaseOrders extends React.Component {
     });
     
     return (
-      <table className="table table-bordered">
+      <table className="table table-bordered record-table">
         <thead>
           <tr>
             <th>Title</th>
             <th>Date</th>
-            <th>Options</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>

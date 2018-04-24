@@ -5,14 +5,21 @@ import LineItems from './line_items';
 export default class PurchaseOrder extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.handleRowClick = this.handleRowClick.bind(this);
+  }
+
+  handleRowClick(e) {
+    e.preventDefault();
+    window.location.href = AppRoutes.purchaseOrder(this.props.purchase_order.id);
   }
 
   asRow() {
     return (
-      <tr>
+      <tr onClick={this.handleRowClick}>
         <td>{this.props.purchase_order.title}</td>
         <td>{moment(this.props.purchase_order.date).format(MomentFormats.Time)}</td>
-        <td><a href={AppRoutes.purchaseOrders + '/' + this.props.purchase_order.id} className="btn btn-secondary">View</a></td>
+        <td>{amountFormat(this.props.purchase_order.total)}</td>
       </tr>
     );
   }
