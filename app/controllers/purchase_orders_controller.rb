@@ -1,6 +1,10 @@
 class PurchaseOrdersController < ApplicationController
   def show
     @purchase_order = PurchaseOrder.with_line_items.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @purchase_order.as_json(include: {line_items: {include: :item} }) }
+    end
   end
 
   def create

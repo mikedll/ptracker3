@@ -5,8 +5,12 @@ export default class PurchaseOrders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchase_orders: this.props.data
+      purchase_orders: null
     };
+    if(this.props.data)
+      this.state.purchase_orders = this.props.data;
+    else
+      this.state.purchase_orders = __purchase_orders;
   }
 
   render() {
@@ -15,18 +19,22 @@ export default class PurchaseOrders extends React.Component {
     });
     
     return (
-      <table className="table table-bordered record-table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {purchaseOrders}
-        </tbody>
-      </table>
+      <div>
+        <h1>Purchase Orders</h1>
+
+        <table className="table table-bordered record-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {purchaseOrders}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }

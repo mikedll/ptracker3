@@ -1,1 +1,4 @@
-= react_component 'purchase_order', { purchase_order: @purchase_order.as_json(include: {line_items: {include: :item} }) }
+- content_for :head do
+  = render :partial => 'shared/app_bootstrap', :locals => { :app_class => 'purchase_order', data: @purchase_order.as_json(include: {line_items: {include: :item} }) }
+
+= react_component 'app_root'
