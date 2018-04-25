@@ -1,0 +1,31 @@
+
+$highlight-color: #A9DFBF;
+  
+.line_items {
+
+  table {
+    td:nth-child(1) { width: 20%; }
+    td:nth-child(2) { width: 20%; }
+    td:nth-child(3) { width: 20%; }
+    td:nth-child(4) { width: 20%; }
+    td:nth-child(5) { width: 20%; }
+  }
+       
+  tr.total-line {
+    border-top: 2px solid #000;
+    font-weight: bold;
+  }
+
+  td.total-label {
+    text-align: right;
+  }
+}
+
+
+table.record-table {
+  tbody tr:hover {
+    background: $highlight-color;
+    cursor: pointer;
+  }
+}
+      

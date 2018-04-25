@@ -11,16 +11,16 @@ export default class PurchaseOrders extends React.Component {
 
   render() {
     var purchaseOrders = this.state.purchase_orders.map(function(po) {
-      return <PurchaseOrder key={po.id} purchase_order={po}/>;
+      return <PurchaseOrder key={po.id} purchase_order={po} row={true}/>;
     });
     
     return (
-      <table className="table table-bordered">
+      <table className="table table-bordered record-table">
         <thead>
           <tr>
             <th>Title</th>
             <th>Date</th>
-            <th>Options</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>

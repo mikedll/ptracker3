@@ -1,84 +1,106 @@
 import React from 'react';
 import update from 'immutability-helper';
-import LineItem from './line_item';
+import LineItemRow from './line_item_row';
 import LineItemForm from './line_item_form';
-import AmountBox from './amount_box';
+import _ from 'underscore';
 
 export default class LineItems extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      line_items: this.props.data
+      line_items: this.props.data,
+      purchase_order: this.props.purchase_order,
+      lineItemsInEditMode: []
     };
 
     this.addLineItem = this.addLineItem.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleModeChange = this.handleModeChange.bind(this);
   }
 
-  handleDelete(line_item) {
-    var index = this.state.line_items.indexOf(line_item);
-    var line_items = update(this.state.line_items, { $splice: [[index, 1]] } );
-    this.setState({line_items: line_items});
+  handleDelete(line_item, data) {
+    this.setState(function(prevState) {
+      var index = prevState.line_items.indexOf(line_item);
+      var line_items = update(prevState.line_items, { $splice: [[index, 1]] } );
+      return {line_items: line_items, purchase_order: data};
+    });
   }
 
-  handleUpdate(line_item, data) {
-    var index = this.state.line_items.indexOf(line_item);
-    var line_items = update(this.state.line_items, {$splice: [[index, 1, data]]});
-    this.setState({line_items: line_items});
+  /*
+   * Updates line item data here, and removes
+   * the editing flag for that line item.
+   */
+  handleUpdate(lineItem, data) {
+    this.setState((prevState) => {
+      const index = prevState.line_items.indexOf(lineItem);
+      const line_items = update(prevState.line_items, {$splice: [[index, 1, _.omit(data, 'purchase_order')]]});
+      return {
+        line_items: line_items,
+        purchase_order: data.purchase_order,
+        lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem)};
+    });
+  }
+
+  stateWithoutEditFlag(prevState, lineItem) {
+    let l = update(prevState.lineItemsInEditMode, {$splice: [[prevState.lineItemsInEditMode.indexOf(lineItem.id), 1]]});
+    return l;
+  }
+  
+  handleModeChange(lineItem, isEditing) {
+    if(isEditing)
+      this.setState(prevState => {
+        return { lineItemsInEditMode: update(prevState.lineItemsInEditMode, {$push: [lineItem.id]}) };
+      });
+    else
+      this.setState(prevState => {
+        return {lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem)};
+      });
   }
   
   addLineItem(line_item) {
-    var line_items = update(this.state.line_items, {$push: [line_item]});
-    this.setState({line_items: line_items});
+    this.setState(function(prevState) {
+      var line_items = update(prevState.line_items, {$push: [_.omit(line_item, 'purchase_order')]});
+      return {line_items: line_items, purchase_order: line_item.purchase_order};
+    });
   }
   
-  credits() {
-    var credits = this.state.line_items.filter(function(val) { return val.amount > 0; });
-    return credits.reduce(function(prev, cur) { return prev + parseFloat(cur.amount); }, 0);
-  }
-
-  debits() {
-    var credits = this.state.line_items.filter(function(val) { return val.amount < 0; });
-    return credits.reduce(function(prev, cur) { return prev + parseFloat(cur.amount); }, 0);
-  }
-
-  balance() {
-    return this.debits() + this.credits();
+  total() {
+    return (this.state.lineItemsInEditMode.length == 0) ? this.state.purchase_order.total : null;
   }
 
   render() {
     var $this = this; 
-    var lineItems = this.state.line_items.map(function(li){ return React.createElement(LineItem, {key: li.id, line_item: li, handleDeleteLineItem: $this.handleDelete, handleUpdateLineItem: $this.handleUpdate});});
+    var lineItems = this.state.line_items.map(function(li) {
+      return <LineItemRow key={li.id} purchase_order={$this.state.purchase_order} line_item={li} handleDeleteLineItem={$this.handleDelete} handleUpdateLineItem={$this.handleUpdate} handleModeChange={$this.handleModeChange}/>;
+    });
     
     return (
       <div className="line_items">
-        <h2 className="title"> Line Items </h2>
-        <div className="row">
-          {React.createElement(AmountBox, {type: 'success', amount: this.credits(), text: "Credit"})}
-          {React.createElement(AmountBox, {type: 'danger', amount: this.debits(), text: "Debit"})}
-          {React.createElement(AmountBox, {type: 'info', amount: this.balance(), text: "Balance"})}
-        </div>
-        {React.createElement(LineItemForm, {handleNewRecord: this.addLineItem})}
+        <div><strong> Line Items </strong></div>
+        <LineItemForm handleNewRecord={this.addLineItem} purchaseOrderId={this.state.purchase_order.id}/>
         <hr/>
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Title</th>
-              <th>Amount</th>
+              <th>Date Added</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {lineItems}
+            <tr className="total-line">
+              <td colSpan="2"></td>
+              <td className="total-label">Total:</td>              
+              <td className="total">{amountFormat(this.total())}</td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
     );
   }
 }
-
-LineItems.defaultProps = {
-  line_items: []
-};
