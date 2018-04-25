@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import LineItems from './line_items';
+import { Redirect, Link } from 'react-router-dom';
 
 export default class PurchaseOrder extends React.Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class PurchaseOrder extends React.Component {
     };
     
     if(!this.state.purchaseOrder)
-      if(__purchase_order)
+      if(typeof(__purchase_order) !== 'undefined')
         this.state.purchaseOrder = __purchase_order;
       else
         $.ajax({
@@ -24,10 +25,12 @@ export default class PurchaseOrder extends React.Component {
 
   handleRowClick(e) {
     e.preventDefault();
-    window.location.href = AppRoutes.purchaseOrder(this.state.purchaseOrder.id);
+    this.setState({redirect: true});
   }
-
+  
   asRow() {
+    if(this.state.redirect) return (<Redirect push to={AppRoutes.purchaseOrder(this.state.purchaseOrder.id)}/>);
+    
     return (
       <tr onClick={this.handleRowClick}>
         <td>{this.state.purchaseOrder.title}</td>
