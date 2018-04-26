@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import LineItems from './line_items';
 import { Redirect, Link } from 'react-router-dom';
+import Loader from './loader';
 
 export default class PurchaseOrder extends React.Component {
   constructor(props) {
@@ -11,8 +12,12 @@ export default class PurchaseOrder extends React.Component {
     };
     
     if(!this.state.purchaseOrder)
-      if(typeof(__purchase_order) !== 'undefined')
-        this.state.purchaseOrder = __purchase_order;
+      if(typeof(BootstrappedData.purchase_order) !== 'undefined') {
+        this.state.purchaseOrder = BootstrappedData.purchase_order;
+
+        // prevent bootstrap from clobbering loads of same route with different record param.
+        delete BootstrappedData.purchase_order;
+      }
       else
         $.ajax({
           url: AppRoutes.purchaseOrder(this.props.match.params.id),
@@ -29,6 +34,8 @@ export default class PurchaseOrder extends React.Component {
   }
   
   asRow() {
+    if(!this.state.purchaseOrder) return (<Loader row={true} colspan={3}/>);
+
     if(this.state.redirect) return (<Redirect push to={AppRoutes.purchaseOrder(this.state.purchaseOrder.id)}/>);
     
     return (
@@ -52,6 +59,6 @@ export default class PurchaseOrder extends React.Component {
   render() {
     if(this.props.row) return this.asRow();
 
-    return (!this.state.purchaseOrder ? "Loading..." : this.asDetailed());
+    return (!this.state.purchaseOrder ? (<Loader/>) : this.asDetailed());
   }
 }

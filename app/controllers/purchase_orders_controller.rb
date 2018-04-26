@@ -1,4 +1,10 @@
 class PurchaseOrdersController < ApplicationController
+
+  def index
+    @purchase_orders = PurchaseOrder.ordered.page(params[:page] || 1)
+    render :json => @purchase_orders
+  end
+
   def show
     @purchase_order = PurchaseOrder.with_line_items.find(params[:id])
     respond_to do |format|
