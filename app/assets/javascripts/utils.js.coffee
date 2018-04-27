@@ -1,3 +1,7 @@
 
 @amountFormat = (amount) ->
-  '$ ' + Number(amount).toLocaleString()
+  if amount? then ('$ ' + Number(amount).toLocaleString()) else '?'
+
+@MomentFormats = {
+  Time: 'MMMM Do YYYY, h:mm a'
+};

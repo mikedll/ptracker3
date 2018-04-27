@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
 
-  resources :line_items, :only => [:index, :create, :update, :destroy]
+  resources :purchase_orders, :only => [:index, :show, :create] do
+    resources :line_items, :only => [:create, :update, :destroy]
+  end
 
+  resources :items, :only => [:index] do
+    collection do
+      get :autocomplete
+    end
+  end
   get 'welcome/index'
 
   root 'welcome#index'
