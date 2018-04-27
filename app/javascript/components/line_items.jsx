@@ -54,7 +54,7 @@ export default class LineItems extends React.Component {
       });
     else
       this.setState(prevState => {
-        return {lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem)};
+        return { lineItemsInEditMode: this.stateWithoutEditFlag(prevState, lineItem) };
       });
   }
   
