@@ -31,11 +31,13 @@ class Paginator extends React.Component {
     });
 
     return (
-      <nav>
-        <ul className="pagination">
-          {[...[first, prev], ...middle, ...[next, last]]}
-        </ul>
-      </nav>
+      <div className="container">
+        <nav>
+          <ul className="pagination">
+            {[...[first, prev], ...middle, ...[next, last]]}
+          </ul>
+        </nav>
+      </div>
     );
   }
 }
