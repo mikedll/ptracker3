@@ -260,6 +260,7 @@ DEPENDENCIES
   pg
   puma (~> 3.11)
   rails (~> 5.2)
+  rails-html-sanitizer (~> 1.0, >= 1.0.4)
   sass-rails (~> 5.0)
   selenium-webdriver
   spring
