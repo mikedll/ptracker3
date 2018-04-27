@@ -1,3 +1,3 @@
 <script language="javascript">
-  BootstrappedData.<%= app_class.underscore %> = <%= data.to_json.html_safe %>
+  BootstrappedData.<%= (defined?(multiplicity) && multiplicity) == :plural ? 'query_result' : 'record' %> = <%= data.to_json.html_safe %>
 </script>

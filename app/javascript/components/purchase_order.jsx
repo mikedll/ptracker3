@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import LineItems from './line_items';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Loader from './loader';
 
 export default class PurchaseOrder extends React.Component {
@@ -12,11 +12,11 @@ export default class PurchaseOrder extends React.Component {
     };
     
     if(!this.state.purchaseOrder)
-      if(typeof(BootstrappedData.purchase_order) !== 'undefined') {
-        this.state.purchaseOrder = BootstrappedData.purchase_order;
+      if(typeof(BootstrappedData.record) !== 'undefined') {
+        this.state.purchaseOrder = BootstrappedData.record;
 
         // prevent bootstrap from clobbering loads of same route with different record param.
-        delete BootstrappedData.purchase_order;
+        delete BootstrappedData.record;
       }
       else
         $.ajax({

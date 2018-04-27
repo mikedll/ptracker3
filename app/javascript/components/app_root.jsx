@@ -16,6 +16,7 @@ class AppRoot extends React.Component {
         <div>
           <Route exact path="/" component={PurchaseOrders}/>
           <Route path="/welcome" component={PurchaseOrders}/>
+          <Route exact path="/purchase_orders" component={PurchaseOrders}/>
           <Route path="/purchase_orders/:id" component={PurchaseOrder}/>
         </div>
       </Router>

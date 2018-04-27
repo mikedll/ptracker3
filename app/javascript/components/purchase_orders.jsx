@@ -1,31 +1,35 @@
 import React from 'react';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
+import Paginator from './paginator';
 
 export default class PurchaseOrders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchase_orders: null
+      purchaseOrders: null,
+      queryInfo: null
     };
     if(this.props.data)
-      this.state.purchase_orders = this.props.data;
+      this.state.purchaseOrders = this.props.data;
     else
-      if(typeof(BootstrappedData.purchase_orders) !== 'undefined') {
-        this.state.purchase_orders = BootstrappedData.purchase_orders;
-        delete BootstrappedData.purchase_orders;
+      if(typeof(BootstrappedData.query_result) !== 'undefined') {
+        this.state.purchaseOrders = BootstrappedData.query_result.results;
+        this.state.queryInfo = BootstrappedData.query_result.info;
+        delete BootstrappedData.query_result;
       }
       else
         $.ajax({
           url: AppRoutes.purchaseOrders,
+          data: { page: getUrlParameter('page')},
           dataType: 'JSON',
-          success: (data) => this.setState({purchase_orders: data})
+          success: (data) => this.setState({purchaseOrders: data.results, queryInfo: data.info})
         });
   }
 
   render() {
-    if (!this.state.purchase_orders) return (<Loader/>);
-    var purchaseOrders = this.state.purchase_orders.map(function(po) {
+    if (!this.state.purchaseOrders) return (<Loader/>);
+    var purchaseOrders = this.state.purchaseOrders.map(function(po) {
       return <PurchaseOrder key={po.id} purchase_order={po} row={true}/>;
     });
     
@@ -45,6 +49,8 @@ export default class PurchaseOrders extends React.Component {
             {purchaseOrders}
           </tbody>
         </table>
+
+        <Paginator {...this.state.queryInfo} path={AppRoutes.purchaseOrders}/>
       </div>
     );
   }

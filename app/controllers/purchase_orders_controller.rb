@@ -1,8 +1,11 @@
 class PurchaseOrdersController < ApplicationController
 
   def index
-    @purchase_orders = PurchaseOrder.ordered.page(params[:page] || 1)
-    render :json => @purchase_orders
+    @query_result = PurchaseOrder.search(params[:page])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @query_result }
+    end
   end
 
   def show
