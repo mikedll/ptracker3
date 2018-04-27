@@ -31,7 +31,7 @@ export default class PurchaseOrders extends React.Component {
       });    
     }
     
-    const posTable = (!this.state.queryResult.results) ? <Loader/> : (
+    const posTable = (!this.state.queryResult) ? <Loader/> : (
       <table className="table table-bordered record-table">
         <thead>
           <tr>
