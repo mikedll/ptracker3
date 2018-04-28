@@ -2,6 +2,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import _ from 'underscore';
 import Loader from './loader';
+import Paginator from './paginator';
 
 export default class Items extends React.Component {
 
@@ -12,8 +13,9 @@ export default class Items extends React.Component {
       selected_item_id: null
     };
 
-    this.state.queryResult = new RecordsHelper(true).getBootstrapped();
-    if(this.state.queryResult && this.queryResult.results.length > 0) this.state.selected_item_id = this.queryResult.results[0].id;
+    this.recordsHelper = new RecordsHelper(true);
+    this.state.queryResult = this.recordsHelper.getBootstrapped();
+    if(this.state.queryResult && this.state.queryResult.results.length > 0) this.state.selected_item_id = this.state.queryResult.results[0].id;
     
     this.handleChange = this.handleChange.bind(this);
   }
@@ -33,18 +35,12 @@ export default class Items extends React.Component {
   }
 
   render() {
-    var gPage = parseInt(getUrlParameter('page'));
-    if(gPage == null || isNaN(gPage)) gPage = 1;
-    if(!this.state.items) {
-      $.ajax({
-        url: AppRoutes.items,
-        data: { page: gPage },
-        dataType: 'JSON',
-        success: (data) => this.setState({queryResult: data})
-      });
+    const page = this.recordsHelper.pageFromQuery();
+    if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
+      this.recordsHelper.fetchPage(AppRoutes.items, page, (data) => this.setState({queryResult: data, selected_item_id: null}));
     }
 
-    const itemsList = (this.state.queryResult) ? (      
+    const itemsList = (this.state.loading || !this.state.queryResult) ? <Loader/> : (
       <form>
         <div className="row">
           <div className="col">
@@ -57,14 +53,13 @@ export default class Items extends React.Component {
           </div>
         </div>
       </form>
-    ) : <Loader/>;
+    );
     
     return (
       <div>
         <h1>Item Catalogue</h1>
-        <div>
-          {itemsList}
-        </div>
+        {itemsList}
+        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
       </div>
     );
   }

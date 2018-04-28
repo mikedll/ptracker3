@@ -8,16 +8,18 @@ export default class PurchaseOrder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchaseOrder: null
+      purchaseOrder: props.purchase_order
     };
     
-    this.state.purchaseOrder = new RecordsHelper(false).getBootstrapped();
-    if(!this.state.purchaseOrder)
-      $.ajax({
-        url: AppRoutes.purchaseOrder(this.props.match.params.id),
-        dataType: 'JSON',
-        success: (data) => this.setState({purchaseOrder: data})
-      });
+    if(!this.state.purchaseOrder) {
+      this.state.purchaseOrder = new RecordsHelper(false).getBootstrapped();
+      if(!this.state.purchaseOrder)
+        $.ajax({
+          url: AppRoutes.purchaseOrder(this.props.match.params.id),
+          dataType: 'JSON',
+          success: (data) => this.setState({purchaseOrder: data})
+        });
+    }
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }

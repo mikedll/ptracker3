@@ -42,4 +42,11 @@ class Paginator extends React.Component {
   }
 }
 
+Paginator.defaultProps = {
+  total: 1,
+  per_page: 10,
+  pages: 1,
+  page: 1
+};
+
 export default Paginator;
