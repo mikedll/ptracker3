@@ -9,13 +9,8 @@ export default class PurchaseOrders extends React.Component {
     this.state = {
       queryResult: null
     };
-    if(this.props.data)
-      this.state.purchaseOrders = this.props.data;
-    else
-      if(typeof(BootstrappedData.query_result) !== 'undefined') {
-        this.state.queryResult = BootstrappedData.query_result;
-        delete BootstrappedData.queryResult;
-      }
+
+    this.state.queryResult = new RecordsHelper(true).getBootstrapped();
   }
 
   render() {
