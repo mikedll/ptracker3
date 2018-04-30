@@ -17,7 +17,8 @@ gem 'pg'
 gem 'puma', '~> 3.11'
 
 gem 'webpacker', '~> 3.4'
-gem 'webpacker-react'
+
+gem 'react-rails'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
