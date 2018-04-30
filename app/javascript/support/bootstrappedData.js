@@ -1,0 +1,4 @@
+
+var BootstrappedData = {};
+
+export { BootstrappedData };

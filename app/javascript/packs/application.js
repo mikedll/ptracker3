@@ -17,8 +17,3 @@ ReactRailsUJS.useContext(componentRequireContext);
 ReactRailsUJS.removeEvent('DOMContentLoaded', ReactRailsUJS.handleMount);
 ReactRailsUJS.removeEvent('onload', ReactRailsUJS.handleMount);
 
-import AppRoot from 'components/app_root';
-
-import WebpackerReact from 'webpacker-react';
-
-WebpackerReact.setup({AppRoot});

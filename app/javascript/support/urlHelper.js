@@ -1,6 +1,9 @@
 // https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
 
 var getUrlParameter = function getUrlParameter(sParam) {
+
+  if(typeof(window) === "undefined") return null;
+  
   var sPageURL = decodeURIComponent(window.location.search.substring(1)),
       sURLVariables = sPageURL.split('&'),
       sParameterName,
@@ -16,3 +19,5 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
   return null;
 };
+
+export { getUrlParameter };

@@ -1,4 +1,6 @@
 import React from 'react';
+import { AppRoutes } from 'support/appRoutes';
+import { RecordsHelper } from 'support/recordsHelper';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
 import Paginator from './paginator';
@@ -14,7 +16,9 @@ export default class PurchaseOrders extends React.Component {
     this.state.queryResult = this.recordsHelper.getBootstrapped();
   }
 
-  render() {    
+  render() {
+    var log = JSON.stringify(BootstrappedData);
+    
     const page = this.recordsHelper.pageFromQuery();
     if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
       this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, page, (data) => this.setState({queryResult: data}));

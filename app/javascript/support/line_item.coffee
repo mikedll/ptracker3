@@ -8,5 +8,4 @@ class LineItem
     return null if !@item || !@quantity;
     amountFormat(Math.round((parseFloat(@quantity) * @item.unit_price) * 100) / 100);
 
-root = exports ? this
-root.LineItem = LineItem
+export { LineItem }

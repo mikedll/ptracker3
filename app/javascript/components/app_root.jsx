@@ -1,7 +1,8 @@
 
 import React from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
+  StaticRouter,
   Route,
   Link
 } from 'react-router-dom';
@@ -9,6 +10,29 @@ import {
 import Items from './items';
 import PurchaseOrders from './purchase_orders';
 import PurchaseOrder from './purchase_order';
+import { AppRoutes } from 'support/appRoutes';
+
+class Router extends React.Component {
+  renderRouter = () => {
+    if(typeof window !== 'undefined') {
+      return(
+        <BrowserRouter>
+          {this.props.children}
+        </BrowserRouter>
+      );
+    } else {
+      return(
+        <StaticRouter location={this.props.path} context={{}}>
+          {this.props.children}
+        </StaticRouter>
+      );
+    }
+  }
+
+  render() {
+    return(this.renderRouter());
+  }  
+}
 
 class AppRoot extends React.Component {
 
@@ -22,7 +46,7 @@ class AppRoot extends React.Component {
     );
 
     return (
-      <Router>
+      <Router path={this.props.path}>
         <div>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Route path={AppRoutes.root} exact children={() => (

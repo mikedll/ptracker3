@@ -1,5 +1,6 @@
 - content_for :head do
   = render :partial => 'shared/app_bootstrap', :locals => { :data => @query_result }.merge(:multiplicity => (defined?(multiplicity) ? multiplicity : :plural))
 
-= react_component 'AppRoot'
+= react_component 'app_root', { path: request.path }, prerender: true
+  
   

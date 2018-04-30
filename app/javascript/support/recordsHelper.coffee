@@ -1,3 +1,5 @@
+import { getUrlParameter } from 'support/urlHelper';
+
 class RecordsHelper
   constructor: (@isPlural) ->
   getBootstrapped: () ->
@@ -17,12 +19,12 @@ class RecordsHelper
     !queryResult? || page != queryResult.info.page
 
   fetchPage: (path, page, success) ->
-    $.ajax({
-      url: path
-      data: { page: page }
-      dataType: 'JSON'
-      success: success
-    })
 
-root = exports ? this
-root.RecordsHelper = RecordsHelper
+    # $.ajax({
+    #   url: path
+    #   data: { page: page }
+    #   dataType: 'JSON'
+    #   success: success
+    # })
+
+export { RecordsHelper }
