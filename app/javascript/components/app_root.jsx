@@ -6,6 +6,7 @@ import {
   Link
 } from 'react-router-dom';
 
+import Items from './items';
 import PurchaseOrders from './purchase_orders';
 import PurchaseOrder from './purchase_order';
 
@@ -38,9 +39,10 @@ class AppRoot extends React.Component {
             </div>
           </nav>
           <Route exact path="/" component={PurchaseOrders}/>
-          <Route path="/welcome" component={PurchaseOrders}/>
+          <Route exact path="/welcome" component={PurchaseOrders}/>
           <Route exact path="/purchase_orders" component={PurchaseOrders}/>
-          <Route path="/purchase_orders/:id" component={PurchaseOrder}/>
+          <Route exact path="/purchase_orders/:id" component={PurchaseOrder}/>
+          <Route exact path="/items" component={Items}/>
         </div>
       </Router>
     );

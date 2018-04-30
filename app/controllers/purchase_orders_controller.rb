@@ -3,7 +3,7 @@ class PurchaseOrdersController < ApplicationController
   def index
     @query_result = PurchaseOrder.search(params[:page])
     respond_to do |format|
-      format.html
+      format.html { render 'shared/app_root' }
       format.json { render :json => @query_result }
     end
   end

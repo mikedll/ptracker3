@@ -9,28 +9,17 @@ export default class PurchaseOrders extends React.Component {
     this.state = {
       queryResult: null
     };
-    if(this.props.data)
-      this.state.purchaseOrders = this.props.data;
-    else
-      if(typeof(BootstrappedData.query_result) !== 'undefined') {
-        this.state.queryResult = BootstrappedData.query_result;
-        delete BootstrappedData.queryResult;
-      }
+
+    this.recordsHelper = new RecordsHelper(true);
+    this.state.queryResult = this.recordsHelper.getBootstrapped();
   }
 
-  render() {
-
-    var gPage = parseInt(getUrlParameter('page'));
-    if(gPage == null || isNaN(gPage)) gPage = 1;
-    if(!this.state.queryResult || this.state.queryResult.info.page != gPage) {
-      $.ajax({
-        url: AppRoutes.purchaseOrders,
-        data: { page: gPage},
-        dataType: 'JSON',
-        success: (data) => this.setState({queryResult: data})
-      });    
+  render() {    
+    const page = this.recordsHelper.pageFromQuery();
+    if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
+      this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, page, (data) => this.setState({queryResult: data}));
     }
-    
+
     const posTable = (!this.state.queryResult) ? <Loader/> : (
       <table className="table table-bordered record-table">
         <thead>
@@ -52,7 +41,7 @@ export default class PurchaseOrders extends React.Component {
       <div>
         <h1>Purchase Orders</h1>
         {posTable}
-        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {total: 1, per_page: 10, pages: 1, page: 1})} page={gPage} path={AppRoutes.purchaseOrders}/>
+        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.purchaseOrders}/>
       </div>
     );
   }

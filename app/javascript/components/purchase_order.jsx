@@ -11,19 +11,15 @@ export default class PurchaseOrder extends React.Component {
       purchaseOrder: props.purchase_order
     };
     
-    if(!this.state.purchaseOrder)
-      if(typeof(BootstrappedData.record) !== 'undefined') {
-        this.state.purchaseOrder = BootstrappedData.record;
-
-        // prevent bootstrap from clobbering loads of same route with different record param.
-        delete BootstrappedData.record;
-      }
-      else
+    if(!this.state.purchaseOrder) {
+      this.state.purchaseOrder = new RecordsHelper(false).getBootstrapped();
+      if(!this.state.purchaseOrder)
         $.ajax({
           url: AppRoutes.purchaseOrder(this.props.match.params.id),
           dataType: 'JSON',
           success: (data) => this.setState({purchaseOrder: data})
         });
+    }
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }
