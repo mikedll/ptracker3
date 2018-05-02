@@ -14,6 +14,6 @@ var ReactRailsUJS = require("react_ujs");
 ReactRailsUJS.useContext(componentRequireContext);
 
 // removing native events. ReactRailsUJS can't find our components right now.
-ReactRailsUJS.removeEvent('DOMContentLoaded', ReactRailsUJS.handleMount);
-ReactRailsUJS.removeEvent('onload', ReactRailsUJS.handleMount);
+// ReactRailsUJS.removeEvent('DOMContentLoaded', ReactRailsUJS.handleMount);
+// ReactRailsUJS.removeEvent('onload', ReactRailsUJS.handleMount);
 

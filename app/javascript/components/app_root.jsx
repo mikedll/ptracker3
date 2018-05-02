@@ -62,11 +62,11 @@ class AppRoot extends React.Component {
               </ul>
             </div>
           </nav>
-          <Route exact path="/" component={PurchaseOrders}/>
-          <Route exact path="/welcome" component={PurchaseOrders}/>
-          <Route exact path="/purchase_orders" component={PurchaseOrders}/>
-          <Route exact path="/purchase_orders/:id" component={PurchaseOrder}/>
-          <Route exact path="/items" component={Items}/>
+          <Route exact path="/" render={() => <PurchaseOrders {...this.props}/>}/>
+          <Route exact path="/welcome" render={() => <PurchaseOrders {...this.props}/>}/>
+          <Route exact path="/purchase_orders" render={() => <PurchaseOrders {...this.props}/>}/>
+          <Route exact path="/purchase_orders/:id" render={() => <PurchaseOrder {...this.props}/>}/>
+          <Route exact path="/items" render={() => <Items {...this.props}/>}/>
         </div>
       </Router>
     );

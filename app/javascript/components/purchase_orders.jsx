@@ -12,13 +12,11 @@ export default class PurchaseOrders extends React.Component {
       queryResult: null
     };
 
-    this.recordsHelper = new RecordsHelper(true);
+    this.recordsHelper = new RecordsHelper(true, this.props);
     this.state.queryResult = this.recordsHelper.getBootstrapped();
   }
 
   render() {
-    var log = JSON.stringify(BootstrappedData);
-    
     const page = this.recordsHelper.pageFromQuery();
     if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
       this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, page, (data) => this.setState({queryResult: data}));

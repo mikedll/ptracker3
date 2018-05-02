@@ -1,15 +1,10 @@
 import { getUrlParameter } from 'support/urlHelper';
 
 class RecordsHelper
-  constructor: (@isPlural) ->
+  constructor: (@isPlural, @props) ->
   getBootstrapped: () ->
-    if BootstrappedData?
-      key =  if @isPlural then 'query_result' else 'record'
-      ref = BootstrappedData[key]
-      delete BootstrappedData[key]
-      ref
-    else
-      null
+    key =  if @isPlural then 'query_result' else 'record'
+    @props[key]
 
   pageFromQuery: () ->
     pPage = parseInt(getUrlParameter('page'));
@@ -19,12 +14,11 @@ class RecordsHelper
     !queryResult? || page != queryResult.info.page
 
   fetchPage: (path, page, success) ->
-
-    # $.ajax({
-    #   url: path
-    #   data: { page: page }
-    #   dataType: 'JSON'
-    #   success: success
-    # })
+    $.ajax({
+      url: path
+      data: { page: page }
+      dataType: 'JSON'
+      success: success
+    })
 
 export { RecordsHelper }
