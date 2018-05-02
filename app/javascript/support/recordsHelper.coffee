@@ -7,7 +7,8 @@ class RecordsHelper
     @props[key]
 
   pageFromQuery: () ->
-    pPage = parseInt(getUrlParameter('page'));
+    throw "No pages for single records" if not @isPlural
+    pPage = if typeof(window) == "undefined" then @props.query_result.info.page else parseInt(getUrlParameter('page'));
     if (pPage == null || isNaN(pPage)) then 1 else pPage;
 
   needsFetch: (queryResult, page) ->
