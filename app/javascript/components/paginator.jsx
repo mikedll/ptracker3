@@ -13,7 +13,7 @@ class Paginator extends React.Component {
   item(key, text, page, active, disabled) {
     return (
       <li key={'page-' + key} className={'page-item' + (active ? ' active' : '') + (disabled ? ' disabled' : '')}>
-        <Link {...(disabled ? { onClick: (e) => (e.preventDefault()) } : {})} className="page-link" to={disabled ? '#' : this.props.path + '?page=' + (page)}>{text}</Link>
+        <Link {...(disabled ? { onClick: (e) => (e.preventDefault()) } : {})} className="page-link" to={this.props.path + (disabled ? '#' : '?page=' + (page))}>{text}</Link>
       </li>
     );
   }

@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 import LineItemRow from './line_item_row';
 import LineItemForm from './line_item_form';
 import _ from 'underscore';
+import { amountFormat } from 'support/utils';
 
 export default class LineItems extends React.Component {
   constructor(props) {

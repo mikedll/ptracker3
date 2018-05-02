@@ -1,3 +1,4 @@
+import { amountFormat } from 'support/utils';
 
 class LineItem
   constructor: (item, quantity) ->

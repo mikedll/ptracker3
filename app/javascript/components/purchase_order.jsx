@@ -5,23 +5,23 @@ import moment from 'moment';
 import LineItems from './line_items';
 import { Redirect } from 'react-router-dom';
 import Loader from './loader';
+import { RecordsHelper } from 'support/recordsHelper';
+import { AppRoutes } from 'support/appRoutes';
 
 export default class PurchaseOrder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchaseOrder: props.purchase_order
+      purchaseOrder: null
     };
     
-    if(!this.state.purchaseOrder) {
-      this.state.purchaseOrder = new RecordsHelper(false).getBootstrapped();
-      if(!this.state.purchaseOrder)
-        $.ajax({
-          url: AppRoutes.purchaseOrder(this.props.match.params.id),
-          dataType: 'JSON',
-          success: (data) => this.setState({purchaseOrder: data})
-        });
-    }
+    this.state.purchaseOrder = new RecordsHelper(false, this.props).getBootstrapped();
+    if(!this.state.purchaseOrder)
+      $.ajax({
+        url: AppRoutes.purchaseOrder(this.props.match.params.id),
+        dataType: 'JSON',
+        success: (data) => this.setState({purchaseOrder: data})
+      });
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }

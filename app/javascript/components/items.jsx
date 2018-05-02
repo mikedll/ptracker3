@@ -3,6 +3,9 @@ import update from 'immutability-helper';
 import _ from 'underscore';
 import Loader from './loader';
 import Paginator from './paginator';
+import { RecordsHelper } from 'support/recordsHelper';
+import { AppRoutes } from 'support/appRoutes';
+import { amountFormat } from 'support/utils';
 
 export default class Items extends React.Component {
 
@@ -13,7 +16,8 @@ export default class Items extends React.Component {
       selected_item_id: null
     };
 
-    this.recordsHelper = new RecordsHelper(true);
+    
+    this.recordsHelper = new RecordsHelper(true, this.props);
     this.state.queryResult = this.recordsHelper.getBootstrapped();
     if(this.state.queryResult && this.state.queryResult.results.length > 0) this.state.selected_item_id = this.state.queryResult.results[0].id;
     
@@ -35,10 +39,11 @@ export default class Items extends React.Component {
   }
 
   render() {
-    const page = this.recordsHelper.pageFromQuery();
-    if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
-      this.recordsHelper.fetchPage(AppRoutes.items, page, (data) => this.setState({queryResult: data, selected_item_id: null}));
+    if(this.recordsHelper.needsFetch(this.state.queryResult)) {
+      this.recordsHelper.fetchPage(AppRoutes.items, (data) => this.setState({queryResult: data, selected_item_id: null}));
     }
+    
+    const page = this.recordsHelper.pageFromQuery();
 
     const itemsList = (this.state.loading || !this.state.queryResult) ? <Loader/> : (
       <form>

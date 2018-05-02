@@ -12,15 +12,17 @@ export default class PurchaseOrders extends React.Component {
       queryResult: null
     };
 
+    
     this.recordsHelper = new RecordsHelper(true, this.props);
     this.state.queryResult = this.recordsHelper.getBootstrapped();
   }
 
   render() {
-    const page = this.recordsHelper.pageFromQuery();
-    if(this.recordsHelper.needsFetch(this.state.queryResult, page)) {
-      this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, page, (data) => this.setState({queryResult: data}));
+    if(this.recordsHelper.needsFetch(this.state.queryResult)) {
+      this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, (data) => this.setState({queryResult: data}));
     }
+
+    const page = this.recordsHelper.pageFromQuery();
 
     const posTable = (!this.state.queryResult) ? <Loader/> : (
       <table className="table table-bordered record-table">
@@ -33,7 +35,7 @@ export default class PurchaseOrders extends React.Component {
         </thead>
         <tbody>
           {this.state.queryResult.results.map(function(po) {
-            return <PurchaseOrder key={po.id} purchase_order={po} row={true}/>;
+            return <PurchaseOrder key={po.id} record={po} row={true}/>;
           })}
         </tbody>
       </table>
