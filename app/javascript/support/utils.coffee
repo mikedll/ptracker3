@@ -1,7 +1,9 @@
 
-@amountFormat = (amount) ->
+amountFormat = (amount) ->
   if amount? then ('$ ' + Number(amount).toLocaleString()) else '?'
 
-@MomentFormats = {
+MomentFormats = {
   Time: 'MMMM Do YYYY, h:mm a'
 };
+
+export { amountFormat, MomentFormats }

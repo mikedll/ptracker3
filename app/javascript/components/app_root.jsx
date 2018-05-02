@@ -1,7 +1,8 @@
 
 import React from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
+  StaticRouter,
   Route,
   Link
 } from 'react-router-dom';
@@ -9,10 +10,45 @@ import {
 import Items from './items';
 import PurchaseOrders from './purchase_orders';
 import PurchaseOrder from './purchase_order';
+import { AppRoutes } from 'support/appRoutes';
+import _ from 'underscore';
 
-class AppRoot extends React.Component {
+class Router extends React.Component {
+  renderRouter = () => {
+    if(typeof window !== 'undefined') {
+      return(
+        <BrowserRouter>
+          {this.props.children}
+        </BrowserRouter>
+      );
+    } else {
+      return(
+        <StaticRouter location={this.props.path} context={{}}>
+          {this.props.children}
+        </StaticRouter>
+      );
+    }
+  }
 
   render() {
+    return(this.renderRouter());
+  }  
+}
+
+const renderMergedProps = (component, ...rest) => {
+  const finalProps = Object.assign({}, ...rest);
+  return (React.createElement(component, finalProps));
+};
+
+const PropsRoute = ({ component, ...rest }) => {
+  return <Route {...rest} render={routeProps => { return renderMergedProps(component, routeProps, rest); }}/>;
+};
+
+class AppRoot extends React.Component {
+  
+  render() {
+    const bootstrapProps = _.pick(this.props, 'query_result', 'record');
+    
     const MenuLink = ({ label, to, activeOnlyWhenExact}) => (
       <Route path={to} exact={activeOnlyWhenExact} children={({ match}) => (
         <li className={'nav-item' + (match ? ' active' : '')}>
@@ -22,7 +58,7 @@ class AppRoot extends React.Component {
     );
 
     return (
-      <Router>
+      <Router path={this.props.path}>
         <div>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Route path={AppRoutes.root} exact children={() => (
@@ -38,11 +74,11 @@ class AppRoot extends React.Component {
               </ul>
             </div>
           </nav>
-          <Route exact path="/" component={PurchaseOrders}/>
-          <Route exact path="/welcome" component={PurchaseOrders}/>
-          <Route exact path="/purchase_orders" component={PurchaseOrders}/>
-          <Route exact path="/purchase_orders/:id" component={PurchaseOrder}/>
-          <Route exact path="/items" component={Items}/>
+          <PropsRoute exact path="/" component={PurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/welcome" component={PurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/purchase_orders" component={PurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/purchase_orders/:id" component={PurchaseOrder} {...bootstrapProps}/>
+          <PropsRoute exact path="/items" component={Items} {...bootstrapProps}/>
         </div>
       </Router>
     );

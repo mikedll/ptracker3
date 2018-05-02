@@ -12,3 +12,6 @@ var AppRoutes = {
   },
   items: '/items'
 };
+
+export { AppRoutes };
+
