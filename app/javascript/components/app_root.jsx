@@ -6,12 +6,13 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-
+import Loadable from 'react-loadable';
 import Items from './items';
 import PurchaseOrders from './purchase_orders';
 import PurchaseOrder from './purchase_order';
 import { AppRoutes } from 'support/appRoutes';
 import _ from 'underscore';
+import Loader from './loader';
 
 class Router extends React.Component {
   renderRouter = () => {
@@ -43,6 +44,11 @@ const renderMergedProps = (component, ...rest) => {
 const PropsRoute = ({ component, ...rest }) => {
   return <Route {...rest} render={routeProps => { return renderMergedProps(component, routeProps, rest); }}/>;
 };
+
+const LPurchaseOrders = Loadable({
+  loader: () => import('./purchase_orders'),
+  loading: Loader
+});
 
 class AppRoot extends React.Component {
   
