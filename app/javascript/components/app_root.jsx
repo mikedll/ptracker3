@@ -50,6 +50,11 @@ const LPurchaseOrders = Loadable({
   loading: Loader
 });
 
+const LPurchaseOrder = Loadable({
+  loader: () => import('./purchase_order'),
+  loading: Loader
+});
+
 class AppRoot extends React.Component {
   
   render() {
@@ -80,10 +85,10 @@ class AppRoot extends React.Component {
               </ul>
             </div>
           </nav>
-          <PropsRoute exact path="/" component={PurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/" component={LPurchaseOrders} {...bootstrapProps}/>
           <PropsRoute exact path="/welcome" component={PurchaseOrders} {...bootstrapProps}/>
           <PropsRoute exact path="/purchase_orders" component={PurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/purchase_orders/:id" component={PurchaseOrder} {...bootstrapProps}/>
+          <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} {...bootstrapProps}/>
           <PropsRoute exact path="/items" component={Items} {...bootstrapProps}/>
         </div>
       </Router>

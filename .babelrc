@@ -25,7 +25,6 @@
     [
       "import-inspector",
       {
-        "serverSideRequirePath": true,
         "webpackRequireWeakId": true,
       }
     ]
