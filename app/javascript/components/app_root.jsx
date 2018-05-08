@@ -7,12 +7,10 @@ import {
   Link
 } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import Items from './items';
-import PurchaseOrders from './purchase_orders';
-import PurchaseOrder from './purchase_order';
 import { AppRoutes } from 'support/appRoutes';
 import _ from 'underscore';
 import Loader from './loader';
+
 
 class Router extends React.Component {
   renderRouter = () => {
@@ -50,8 +48,14 @@ const LPurchaseOrders = Loadable({
   loading: Loader
 });
 
+
 const LPurchaseOrder = Loadable({
   loader: () => import('./purchase_order'),
+  loading: Loader
+});
+
+const LItems = Loadable({
+  loader: () => import('./items'),
   loading: Loader
 });
 
@@ -86,10 +90,10 @@ class AppRoot extends React.Component {
             </div>
           </nav>
           <PropsRoute exact path="/" component={LPurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/welcome" component={PurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/purchase_orders" component={PurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/welcome" component={LPurchaseOrders} {...bootstrapProps}/>
+          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} {...bootstrapProps}/>
           <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} {...bootstrapProps}/>
-          <PropsRoute exact path="/items" component={Items} {...bootstrapProps}/>
+          <PropsRoute exact path="/items" component={LItems} {...bootstrapProps}/>
         </div>
       </Router>
     );
