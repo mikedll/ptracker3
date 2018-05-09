@@ -9,11 +9,14 @@
 
 
 // Support component names relative to this directory:
-var componentRequireContext = require.context("components", true);
+// var componentRequireContext = require.context("components", true);
 var ReactRailsUJS = require("react_ujs");
-ReactRailsUJS.useContext(componentRequireContext);
+// ReactRailsUJS.useContext(componentRequireContext);
 
 // removing native events. ReactRailsUJS can't find our components right now.
 // ReactRailsUJS.removeEvent('DOMContentLoaded', ReactRailsUJS.handleMount);
 // ReactRailsUJS.removeEvent('onload', ReactRailsUJS.handleMount);
 
+import AppRoot from 'components/app_root';
+
+self.app_root = AppRoot;

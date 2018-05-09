@@ -21,6 +21,12 @@
       {
         "spec": true
       }
+    ],
+    [
+      "import-inspector",
+      {
+        "webpackRequireWeakId": true,
+      }
     ]
   ]
 }

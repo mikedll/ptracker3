@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppRoutes } from 'support/appRoutes';
-import { RecordsHelper } from 'support/recordsHelper';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
 import Paginator from './paginator';
@@ -12,17 +11,15 @@ export default class PurchaseOrders extends React.Component {
       queryResult: null
     };
 
-    
-    this.recordsHelper = new RecordsHelper(true, this.props);
-    this.state.queryResult = this.recordsHelper.getBootstrapped();
+    this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
   }
 
   render() {
-    if(this.recordsHelper.needsFetch(this.state.queryResult)) {
-      this.recordsHelper.fetchPage(AppRoutes.purchaseOrders, (data) => this.setState({queryResult: data}));
+    if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
+      this.props.recordsHelper.fetchPage(AppRoutes.purchaseOrders, (data) => this.setState({queryResult: data}));
     }
 
-    const page = this.recordsHelper.pageFromQuery();
+    const page = this.props.recordsHelper.pageFromQuery();
 
     const posTable = (!this.state.queryResult) ? <Loader/> : (
       <table className="table table-bordered record-table">
