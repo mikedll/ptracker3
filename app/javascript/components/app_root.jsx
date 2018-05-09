@@ -46,18 +46,18 @@ const PropsRoute = ({ component, ...rest }) => {
 };
 
 const LPurchaseOrders = Loadable({
-  loader: () => import('./purchase_orders'),
+  loader: () => import(/* webpackChunkName: "purchase_orders" */'./purchase_orders'),
   loading: Loader
 });
 
 
 const LPurchaseOrder = Loadable({
-  loader: () => import('./purchase_order'),
+  loader: () => import(/* webpackChunkName: "purchase_order" */'./purchase_order'),
   loading: Loader
 });
 
 const LItems = Loadable({
-  loader: () => import('./items'),
+  loader: () => import(/* webpackChunkName: "items" */'./items'),
   loading: Loader
 });
 
