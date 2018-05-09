@@ -17,6 +17,6 @@ var ReactRailsUJS = require("react_ujs");
 // ReactRailsUJS.removeEvent('DOMContentLoaded', ReactRailsUJS.handleMount);
 // ReactRailsUJS.removeEvent('onload', ReactRailsUJS.handleMount);
 
-import appRoot from 'components/appRoot';
+import AppRoot from 'components/app_root';
 
-self.app_root = appRoot;
+self.app_root = AppRoot;
