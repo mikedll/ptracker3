@@ -64,8 +64,8 @@ class AppRoot extends React.Component {
   render() {
     const bootstrapProps = _.pick(this.props, 'query_result', 'record');
     
-    const MenuLink = ({ label, to, activeOnlyWhenExact}) => (
-      <Route path={to} exact={activeOnlyWhenExact} children={({ match}) => (
+    const MenuLink = ({ label, to }) => (
+      <Route path={to} exact children={({ match }) => (
         <li className={'nav-item' + (match ? ' active' : '')}>
           <Link className="nav-link" to={to}>{label}</Link>
         </li>
