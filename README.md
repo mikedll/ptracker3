@@ -26,3 +26,7 @@ Starting the application:
     # Start app.
     bin/rails           
 
+# Todos
+
+[Trello page](https://trello.com/b/kL9mBTPM/react-experiments).
+
