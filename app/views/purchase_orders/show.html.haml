@@ -1,4 +1,0 @@
-- content_for :head do
-  = render :partial => 'shared/app_bootstrap', :locals => { data: @purchase_order.as_json(include: {line_items: {include: :item} }) }
-
-= react_component 'app_root'

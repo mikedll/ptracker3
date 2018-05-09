@@ -1,29 +1,31 @@
 import React from 'react';
+
+import { amountFormat, MomentFormats } from 'support/utils';
 import moment from 'moment';
 import LineItems from './line_items';
 import { Redirect } from 'react-router-dom';
 import Loader from './loader';
+import { RecordsHelper } from 'support/recordsHelper';
+import { AppRoutes } from 'support/appRoutes';
 
 export default class PurchaseOrder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchaseOrder: props.purchase_order
+      purchaseOrder: this.props.row ? this.props.record : null
     };
-    
-    if(!this.state.purchaseOrder)
-      if(typeof(BootstrappedData.record) !== 'undefined') {
-        this.state.purchaseOrder = BootstrappedData.record;
 
-        // prevent bootstrap from clobbering loads of same route with different record param.
-        delete BootstrappedData.record;
-      }
-      else
-        $.ajax({
-          url: AppRoutes.purchaseOrder(this.props.match.params.id),
-          dataType: 'JSON',
-          success: (data) => this.setState({purchaseOrder: data})
-        });
+    // No forward from parent, but bootstrap is available.
+    if(!this.state.purchaseOrder && this.props.recordsHelper) {
+      this.state.purchaseOrder = this.props.recordsHelper.consumeSingularBootstrap();
+    }
+
+    if(!this.state.purchaseOrder)
+      $.ajax({
+        url: AppRoutes.purchaseOrder(this.props.match.params.id),
+        dataType: 'JSON',
+        success: (data) => this.setState({purchaseOrder: data})
+      });
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }

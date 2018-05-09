@@ -12,13 +12,13 @@ class PurchaseOrder < ApplicationRecord
     page = page.to_i || 1
     page = 1 if page == 0
 
-    purchase_orders = scope.page(page)
+    results = scope.page(page)
     { :info => {
         :total => scope.count,
         :page => page,
         :per_page => scope.model.default_per_page
       },
-      :results => purchase_orders
+      :results => results
     }
   end
 
