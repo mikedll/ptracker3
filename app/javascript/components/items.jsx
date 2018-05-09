@@ -17,8 +17,7 @@ export default class Items extends React.Component {
     };
 
     
-    this.recordsHelper = new RecordsHelper(true, this.props);
-    this.state.queryResult = this.recordsHelper.getBootstrapped();
+    this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
     if(this.state.queryResult && this.state.queryResult.results.length > 0) this.state.selected_item_id = this.state.queryResult.results[0].id;
     
     this.handleChange = this.handleChange.bind(this);
@@ -39,11 +38,11 @@ export default class Items extends React.Component {
   }
 
   render() {
-    if(this.recordsHelper.needsFetch(this.state.queryResult)) {
-      this.recordsHelper.fetchPage(AppRoutes.items, (data) => this.setState({queryResult: data, selected_item_id: null}));
+    if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
+      this.props.recordsHelper.fetchPage(AppRoutes.items, (data) => this.setState({queryResult: data, selected_item_id: null}));
     }
     
-    const page = this.recordsHelper.pageFromQuery();
+    const page = this.props.recordsHelper.pageFromQuery();
 
     const itemsList = (this.state.loading || !this.state.queryResult) ? <Loader/> : (
       <form>

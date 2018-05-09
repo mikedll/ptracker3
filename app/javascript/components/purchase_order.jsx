@@ -12,10 +12,14 @@ export default class PurchaseOrder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      purchaseOrder: null
+      purchaseOrder: this.props.row ? this.props.record : null
     };
-    
-    this.state.purchaseOrder = new RecordsHelper(false, this.props).getBootstrapped();
+
+    // No forward from parent, but bootstrap is available.
+    if(!this.state.purchaseOrder && this.props.recordsHelper) {
+      this.state.purchaseOrder = this.props.recordsHelper.consumeSingularBootstrap();
+    }
+
     if(!this.state.purchaseOrder)
       $.ajax({
         url: AppRoutes.purchaseOrder(this.props.match.params.id),

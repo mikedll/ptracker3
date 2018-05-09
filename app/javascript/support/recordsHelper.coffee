@@ -1,16 +1,31 @@
 import { getUrlParameter } from 'support/urlHelper';
+import _ from 'underscore';
 
 class RecordsHelper
-  constructor: (@isPlural, @props) ->
-  getBootstrapped: () ->
-    bootstrap = @props[if @isPlural then 'query_result' else 'record']
+  constructor: (@props) ->
+    @isPlural  = _.has(@props, 'query_result')
+    @consumed = false
 
-    if @isPlural
-      if !bootstrap || (@pageFromQuery() != bootstrap.info.page)
-        return null
-    else if @props.match?
-      if !bootstrap? || parseInt(@props.match.params.id) != bootstrap.id
-        return null
+  consumePluralBootstrap: () ->
+    return null if @consumed
+
+    bootstrap = @props['query_result']
+    @consumed = true
+
+    if !bootstrap? || (@pageFromQuery() != bootstrap.info.page)
+      return null
+
+    bootstrap
+
+  consumeSingularBootstrap: () ->
+    return null if @consumed
+
+    bootstrap = @props['record']
+    @consumed = true
+
+    # calling Component is from Route with matching param
+    if @props.match? && (!bootstrap? || parseInt(@props.match.params.id) != bootstrap.id)
+      return null
 
     bootstrap
 

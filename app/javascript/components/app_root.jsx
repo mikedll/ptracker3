@@ -6,6 +6,8 @@ import {
   Route,
   Link
 } from 'react-router-dom';
+
+import { RecordsHelper } from 'support/recordsHelper';
 import Loadable from 'react-loadable';
 import { AppRoutes } from 'support/appRoutes';
 import _ from 'underscore';
@@ -60,9 +62,13 @@ const LItems = Loadable({
 });
 
 class AppRoot extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.recordsHelper = new RecordsHelper(_.pick(this.props, 'query_result', 'record'));
+  }
   
   render() {
-    const bootstrapProps = _.pick(this.props, 'query_result', 'record');
     
     const MenuLink = ({ label, to }) => (
       <Route path={to} exact children={({ match }) => (
@@ -89,11 +95,12 @@ class AppRoot extends React.Component {
               </ul>
             </div>
           </nav>
-          <PropsRoute exact path="/" component={LPurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/welcome" component={LPurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} {...bootstrapProps}/>
-          <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} {...bootstrapProps}/>
-          <PropsRoute exact path="/items" component={LItems} {...bootstrapProps}/>
+          <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/welcome" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>        
+          <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/items" component={LItems} recordsHelper={this.recordsHelper}/>
+       
         </div>
       </Router>
     );
