@@ -1,24 +1,28 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Rails 5.2 SPA
 
-Things you may want to cover:
+This is a Rails 5.2 SPA supporting server-side rendering, code splits,
+router-tracking with react-router, UIs processed with React, and
+dynamic imports of components with react-loadable.
 
-* Ruby version
+# Setup
 
-* System dependencies
+This has no production home yet.
 
-* Configuration
+    - Ruby 2.3.1.
+    - PostgreSQL (setup a user for yourself)
 
-* Database creation
+Starting the application:
 
-* Database initialization
+    # Install gems
+    bundle 
 
-* How to run the test suite
+    # Load schema and create sample data.
+    bin/rake db:prepare 
 
-* Services (job queues, cache servers, search engines, etc.)
+    # Build the webpack bundles and leave a dev server running.
+    bin/webpack-dev-server
 
-* Deployment instructions
+    # Start app.
+    bin/rails           
 
-* ...
