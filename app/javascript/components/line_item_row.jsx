@@ -75,7 +75,7 @@ export default class LineItemRow extends React.Component {
     const target = e.target;
     var value = target.value;
     const name = target.name;
-    this.setState(update(this.state, {[name]: {$set: value}}));
+    this.setState(prevState => update(prevState, {[name]: {$set: value}}));
   }
   
   handleDelete(e) {

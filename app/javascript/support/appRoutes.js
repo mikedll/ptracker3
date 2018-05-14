@@ -10,7 +10,8 @@ var AppRoutes = {
   lineItem: function(po_id, li_id) {
     return '/purchase_orders/' + po_id + '/line_items/' + li_id;
   },
-  items: '/items'
+  items: '/items',
+  item: function(id) { return '/items/' + id; }
 };
 
 export { AppRoutes };
