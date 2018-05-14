@@ -17,17 +17,33 @@ export default class Items extends React.Component {
       selectedItemUnitPrice: null,
       editingItem: false
     };
-
     
     this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
-    if(this.state.queryResult && this.state.queryResult.results.length > 0) this.state.selected_item_id = this.state.queryResult.results[0].id;
-
+    
+    this.unitPriceEl = null;
+    this.editButtonEl = null;
+    
     this.editItem = this.editItem.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
+  componentDidMount() {
+    if(this.state.queryResult && this.state.queryResult.results.length > 0)
+      this.setState(prevState => ({selected_item_id: this.state.queryResult.results[0].id}));
+    
+    $(document).on('keyup', e => {
+      if(this.state.editingItem && (e.target === this.unitPriceEl || e.target === this.editButtonEl) && e.keyCode == $.ui.keyCode.ESCAPE) {
+        this.toggleEdit();
+      }
+    });
+  }
+  
+  componentWillUnmount() {
+    $(document).off('keyup');
+  }
+  
   handleChange(e) {
     e.preventDefault();
     const target = e.target;
@@ -103,7 +119,12 @@ export default class Items extends React.Component {
   
   render() {
     if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
-      this.props.recordsHelper.fetchPage(AppRoutes.items, (data) => this.setState({queryResult: data, selected_item_id: null}));
+      this.props.recordsHelper.fetchPage(AppRoutes.items, (data) => {
+        this.setState({
+          queryResult: data,
+          selected_item_id: data.results[0].id
+        });
+      });
     }
     
     const page = this.props.recordsHelper.pageFromQuery();
@@ -121,8 +142,8 @@ export default class Items extends React.Component {
       (
         <div className="col">
           <div><h4>{this.currentItemName()}</h4></div>
-          <input className="mb2 mr-sm-2" name="selectedItemUnitPrice" value={this.state.selectedItemUnitPrice} type="text" onKeyPress={this.handleKeyPress} onChange={this.handleChange}/>
-          <button onClick={this.editItem} className="btn btn-primary">Edit</button>
+          <input ref={el => this.unitPriceEl = el} className="mb2 mr-sm-2" name="selectedItemUnitPrice" value={this.state.selectedItemUnitPrice} type="text" onKeyPress={this.handleKeyPress} onChange={this.handleChange}/>
+            <button ref={el => this.editButtonEl = el} onClick={this.editItem} className="btn btn-primary">Edit</button>
         </div>
       );
             
