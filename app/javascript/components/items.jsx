@@ -86,12 +86,21 @@ export default class Items extends React.Component {
     }    
   }
   
-  currentPrice() {
+  currentItem() {
     if(!this.state.queryResult || !this.state.selected_item_id) return null;
-    const item = _.find(this.state.queryResult.results, (item) => item.id == this.state.selected_item_id);
-    return item.unit_price;
+    return _.find(this.state.queryResult.results, (item) => item.id == this.state.selected_item_id);
+  }
+  
+  currentPrice() {
+    const item = this.currentItem();
+    return item ? item.unit_price : null;
   }
 
+  currentItemName() {
+    const item = this.currentItem();
+    return item ? item.name : "";
+  }
+  
   render() {
     if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
       this.props.recordsHelper.fetchPage(AppRoutes.items, (data) => this.setState({queryResult: data, selected_item_id: null}));
@@ -102,6 +111,7 @@ export default class Items extends React.Component {
     const itemView = !this.state.editingItem ?
       (
         <div className="col">
+          <div><h4>{this.currentItemName()}</h4></div>
           <span className="mr-2">
             Price: {amountFormat(this.currentPrice())}
           </span>
@@ -110,6 +120,7 @@ export default class Items extends React.Component {
       ) :
       (
         <div className="col">
+          <div><h4>{this.currentItemName()}</h4></div>
           <input className="mb2 mr-sm-2" name="selectedItemUnitPrice" value={this.state.selectedItemUnitPrice} type="text" onKeyPress={this.handleKeyPress} onChange={this.handleChange}/>
           <button onClick={this.editItem} className="btn btn-primary">Edit</button>
         </div>
