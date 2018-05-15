@@ -14,6 +14,7 @@ export default class LineItemRow extends React.Component {
       item: this.props.line_item.item,
       item_id: this.props.line_item.item.id,
       added_at: this.props.line_item.added_at,
+      unit_price: this.props.line_item.unit_price,
       quantity: this.props.line_item.quantity
     };
     this.handleDelete = this.handleDelete.bind(this);
@@ -104,7 +105,7 @@ export default class LineItemRow extends React.Component {
       success: function(data) {
         // componentDidUpdate is too late for this unbind
         $this.unbindUIDecorators();
-        $this.setState(Object.assign({edit: false}, _.pick(data, 'item', 'item_id', 'added_at', 'quantity')));
+        $this.setState(Object.assign({edit: false}, _.pick(data, 'item', 'item_id', 'added_at', 'unit_price', 'quantity')));
         $this.props.handleUpdateLineItem($this.props.line_item, data);
       }
     }));    
@@ -121,7 +122,7 @@ export default class LineItemRow extends React.Component {
       this.handleEdit();
     }
   }
-  
+
   price() {
     var li = new LineItem(this.state.item, this.state.quantity);
     return li.price();
@@ -132,6 +133,7 @@ export default class LineItemRow extends React.Component {
       <tr>
         <td>{moment(this.props.line_item.added_at).format(MomentFormats.Time)}</td>
         <td>{this.props.line_item.item.name}</td>
+        <td>{amountFormat(this.props.line_item.unit_price)}</td>
         <td>{this.props.line_item.quantity}</td>
         <td>{amountFormat(this.props.line_item.price)}</td>
         <td>
@@ -147,6 +149,8 @@ export default class LineItemRow extends React.Component {
       <tr ref={el => this.el = el}>
         <td><input className="form-control" type="text" name="added_at" placeholder="Date" defaultValue={this.state.added_at} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></td>
         <td><input className="form-control" type="text" name="item_search" placeholder="Item" defaultValue={this.props.line_item.item.name} onKeyPress={this.handleKeyPress}/></td>
+
+        <td className={this.state.unit_price !== this.state.item.unit_price ? "unit-price-difference" : ""}>{amountFormat(this.state.item.unit_price)}</td>
         <td><input className="form-control" type="text" name="quantity" placeholder="Quantity" defaultValue={this.state.quantity} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/></td>
         <td>{this.price()}</td>
         <td>
