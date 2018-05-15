@@ -15,7 +15,8 @@ export default class Items extends React.Component {
       queryResult: null,
       selected_item_id: null,
       selectedItemUnitPrice: null,
-      editingItem: false
+      editingItem: false,
+      searching: false
     };
     
     this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
@@ -27,6 +28,7 @@ export default class Items extends React.Component {
     this.toggleEdit = this.toggleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -101,6 +103,26 @@ export default class Items extends React.Component {
       this.toggleEdit();
     }    
   }
+
+  handleSearchChange(e) {
+    e.preventDefault();
+    const target = e.target;
+    if(e.target.value.length > 2 && !this.state.searching) {
+      $.ajax({url: AppRoutes.items,
+              success: (data) => {
+                this.setState(prevState => {
+                  const nextState = {
+                    queryResult: data
+                  };
+                  nextState.selected_item_id = nextState.queryResult.results[0].id;
+
+                  return nextState;
+                });
+              }
+             });
+      this.setState({searching: true});
+    }
+  }
   
   currentItem() {
     if(!this.state.queryResult || !this.state.selected_item_id) return null;
@@ -164,6 +186,7 @@ export default class Items extends React.Component {
     return (
       <div>
         <h1>Item Catalogue</h1>
+        <input type="text" onChange={this.handleSearchChange} name="search" className="mb"/>
         {itemsList}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
       </div>
