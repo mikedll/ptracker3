@@ -12,7 +12,7 @@ import Loadable from 'react-loadable';
 import { AppRoutes } from 'support/appRoutes';
 import _ from 'underscore';
 import Loader from './loader';
-
+import moment from 'moment';
 
 class Router extends React.Component {
   renderRouter = () => {
@@ -65,7 +65,25 @@ class AppRoot extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      session_info: props.session_info
+    };
+    
     this.recordsHelper = new RecordsHelper(_.pick(this.props, 'query_result', 'record'));
+  }
+  
+  componentDidMount() {
+    const browserOffset = moment().format("Z");
+    if(!this.state.session_info || !this.state.session_info.tzinfo || this.state.session_info.tzoffset !== browserOffset) {
+      $.ajax({url: AppRoutes.session,
+              method: 'PUT',
+              data: {
+                offset: browserOffset
+              },
+              success: (data) => this.setState({tzinfo: data.tzinfo})
+             });
+    }
   }
   
   render() {

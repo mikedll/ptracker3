@@ -48,7 +48,8 @@ class RecordsHelper
       return _.omit(getUrlQueryAsObj(), 'page')
 
   pageFromQuery: () ->
-    throw "No pages for single records" if not @isPlural
+    return 1 if not @isPlural
+
     pPage = if typeof(window) == "undefined" then @props.query_result.info.page else parseInt(getUrlParameter('page'));
     if (pPage == null || isNaN(pPage)) then 1 else pPage;
 
