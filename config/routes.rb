@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
-  resources :items, :only => [:index] do
+  resources :items, :only => [:index, :update] do
     collection do
       get :autocomplete
     end

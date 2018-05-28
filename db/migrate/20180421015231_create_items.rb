@@ -8,6 +8,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
 
     remove_column :line_items, :title, :string
     add_column :line_items, :item_id, :integer
-    add_column :line_items, :quantity, :decimal
+    add_column :line_items, :quantity, :decimal, :precision => 8, :scale => 2
   end
 end
