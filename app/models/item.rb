@@ -7,6 +7,7 @@ class Item < ApplicationRecord
   def self.search(query, page)
     scope = ordered
 
+    q = nil
     if !query.blank?
       q = query.strip
       scope = scope.by_name(q) if !q.blank?
@@ -20,7 +21,8 @@ class Item < ApplicationRecord
       :info => {
         :total => scope.count,
         :page => page,
-        :per_page => scope.model.default_per_page
+        :per_page => scope.model.default_per_page,
+        :query => (q.blank? ? {} : { s: q })
       },
       :results => results
     }

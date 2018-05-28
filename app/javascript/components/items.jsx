@@ -7,6 +7,7 @@ import Paginator from './paginator';
 import { RecordsHelper } from 'support/recordsHelper';
 import { AppRoutes } from 'support/appRoutes';
 import { amountFormat } from 'support/utils';
+import { serializeObj } from 'support/urlHelper';
 
 export default class Items extends React.Component {
 
@@ -22,7 +23,8 @@ export default class Items extends React.Component {
     };
     
     this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
-    
+    this.state.mostRecentSearch = _.defaults(this.props.recordsHelper.getUrlQueryAsObj(), {s: ''}).s;
+
     this.unitPriceEl = null;
     this.editButtonEl = null;
     
@@ -110,10 +112,10 @@ export default class Items extends React.Component {
     e.preventDefault();
     const sQuery = e.target.value;
     
-    if(sQuery.length > 2 && !this.state.searching) {
+    if(!this.state.searching && (sQuery.length > 2 || this.state.mostRecentSearch !== '')) {
       this.setState({searching: true});
       $.ajax({url: AppRoutes.items,
-              data: { s: sQuery },
+              data: { s: (sQuery.length > 2) ? sQuery : '' },
               dataType: 'JSON',
               success: (data) => {
                 this.setState((prevState, prevProps) => {
@@ -122,12 +124,17 @@ export default class Items extends React.Component {
                     selected_item_id: null,
                     redirectToSearch: true,
                     searching: false,
-                    mostRecentSearch: sQuery
+                    mostRecentSearch: _.defaults(data.info.query, {s: ''}).s
                   };
+                  
                   if(nextState.queryResult.results.length > 0) {
                     nextState.selected_item_id = nextState.queryResult.results[0].id;
                   }
-                  prevProps.history.replace(AppRoutes.itemsSearch(nextState.mostRecentSearch));
+
+                  prevProps.history.replace(AppRoutes.items + '?' + serializeObj(Object.assign({}, this.props.recordsHelper.getUrlQueryAsObj(), {
+                    s: nextState.mostRecentSearch,
+                    page: nextState.queryResult.info.page
+                  })));
                   return nextState;
                 });
               }
@@ -166,6 +173,7 @@ export default class Items extends React.Component {
     }
     
     const page = this.props.recordsHelper.pageFromQuery();
+    const urlQuery = this.props.recordsHelper.getUrlQueryAsObj();
 
     const itemView = !this.state.editingItem ?
       (
@@ -184,7 +192,7 @@ export default class Items extends React.Component {
             <button ref={el => this.editButtonEl = el} onClick={this.editItem} className="btn btn-primary">Edit</button>
         </div>
       );
-            
+
 
     const itemsList = (this.state.loading || !this.state.queryResult) ? <Loader/> : (
       <form onSubmit={e => e.preventDefault()}>
@@ -202,9 +210,9 @@ export default class Items extends React.Component {
     return (
       <div>
         <h1>Item Catalogue</h1>
-        <input type="text" onChange={this.handleSearchChange} name="search" className="mb"/>
+        <input type="text" onChange={this.handleSearchChange} defaultValue={this.state.mostRecentSearch} name="search" className="mb"/>
         {itemsList}
-        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
+        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items} urlQuery={urlQuery}/>
       </div>
     );
   }
