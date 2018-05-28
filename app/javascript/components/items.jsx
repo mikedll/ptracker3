@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import update from 'immutability-helper';
 import _ from 'underscore';
 import Loader from './loader';
@@ -16,7 +17,8 @@ export default class Items extends React.Component {
       selected_item_id: null,
       selectedItemUnitPrice: null,
       editingItem: false,
-      searching: false
+      searching: false,
+      mostRecentSearch: ''
     };
     
     this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
@@ -106,21 +108,30 @@ export default class Items extends React.Component {
 
   handleSearchChange(e) {
     e.preventDefault();
-    const target = e.target;
-    if(e.target.value.length > 2 && !this.state.searching) {
+    const sQuery = e.target.value;
+    
+    if(sQuery.length > 2 && !this.state.searching) {
+      this.setState({searching: true});
       $.ajax({url: AppRoutes.items,
+              data: { s: sQuery },
+              dataType: 'JSON',
               success: (data) => {
-                this.setState(prevState => {
+                this.setState((prevState, prevProps) => {
                   const nextState = {
-                    queryResult: data
+                    queryResult: data,
+                    selected_item_id: null,
+                    redirectToSearch: true,
+                    searching: false,
+                    mostRecentSearch: sQuery
                   };
-                  nextState.selected_item_id = nextState.queryResult.results[0].id;
-
+                  if(nextState.queryResult.results.length > 0) {
+                    nextState.selected_item_id = nextState.queryResult.results[0].id;
+                  }
+                  prevProps.history.replace(AppRoutes.itemsSearch(nextState.mostRecentSearch));
                   return nextState;
                 });
               }
              });
-      this.setState({searching: true});
     }
   }
   
@@ -138,13 +149,18 @@ export default class Items extends React.Component {
     const item = this.currentItem();
     return item ? item.name : "";
   }
-  
+
   render() {
+    
     if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
       this.props.recordsHelper.fetchPage(AppRoutes.items, (data) => {
-        this.setState({
-          queryResult: data,
-          selected_item_id: data.results[0].id
+        this.setState(prevState => {
+          const nextState = {
+            queryResult: data,
+            selected_item_id: null
+          };
+          if(nextState.queryResult.results.length > 0) nextState.selected_item_id = data.results[0].id;
+          return nextState;
         });
       });
     }

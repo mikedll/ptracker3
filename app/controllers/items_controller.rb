@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
 
   def index
-    @query_result = Item.search(params[:page])
+    @query_result = Item.search(params[:s], params[:page])
     respond_to do |format|
       format.html { render 'shared/app_root' }
       format.json { render :json => @query_result }
