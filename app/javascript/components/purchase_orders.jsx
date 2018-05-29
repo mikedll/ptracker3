@@ -42,7 +42,7 @@ export default class PurchaseOrders extends React.Component {
     return (
       <div>
         <Helmet>
-          <title>Purchase Orders</title>
+          <title>Purchase Orders - Page {"" + page}</title>
         </Helmet>
         <h1>Purchase Orders</h1>
         {posTable}
