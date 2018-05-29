@@ -15,16 +15,16 @@ Its Trello page is viewable at [trello.com/b/kL9mBTPM/react-experiments](https:/
 
 Some dependencies, and their versions:
 
-    - Ruby 2.3.1.
-    - PostgreSQL (setup a user for yourself)
-    - Webpack 3.11.0
-    - React 16.3.0
-    - React Router 4.2.2
+  - Ruby 2.3.1.
+  - PostgreSQL (setup a user for yourself)
+  - Webpack 3.11.0
+  - React 16.3.0
+  - React Router 4.2.2
 
 In development, I use the following versions of these dependencies:
 
-    - node 8.11.1
-    - npm 6.0.0
+  - node 8.11.1
+  - npm 6.0.0
 
 Starting the application:
 
