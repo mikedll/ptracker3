@@ -6,7 +6,7 @@ namespace :db do
   end
 
   desc "Populates database with sample data."
-  task :populate_sample_data do
+  task :populate_sample_data => [:environment] do
     load "db/sample_data.rb"
   end
 end
