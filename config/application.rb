@@ -16,5 +16,6 @@ module Reactexperiments
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    config.time_zone = 'Pacific Time (US & Canada)'
   end
 end

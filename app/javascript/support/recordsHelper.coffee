@@ -1,4 +1,4 @@
-import { getUrlParameter } from 'support/urlHelper';
+import { getUrlParameter, getUrlQueryAsObj } from 'support/urlHelper';
 import _ from 'underscore';
 
 class RecordsHelper
@@ -38,15 +38,25 @@ class RecordsHelper
 
     false
 
+  #
+  # Does not include page.
+  #
+  getUrlQueryAsObj: () ->
+    if typeof(window) == "undefined"
+      return _.pick(@props.query_result.info, 'query')
+    else
+      return _.omit(getUrlQueryAsObj(), 'page')
+
   pageFromQuery: () ->
-    throw "No pages for single records" if not @isPlural
+    return 1 if not @isPlural
+
     pPage = if typeof(window) == "undefined" then @props.query_result.info.page else parseInt(getUrlParameter('page'));
     if (pPage == null || isNaN(pPage)) then 1 else pPage;
 
   fetchPage: (path, success) ->
     $.ajax({
       url: path
-      data: { page: @pageFromQuery() }
+      data: Object.assign({}, @getUrlQueryAsObj(), { page: @pageFromQuery() }),
       dataType: 'JSON'
       success: success
     })

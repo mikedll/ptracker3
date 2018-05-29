@@ -16,7 +16,7 @@ class LineItemsController < ApplicationController
     if @line_item.update(line_item_params)
       _render_json
     else
-      head json: @line_item.errors, status: :unprocessible_entity
+      render json: @line_item.errors, status: :unprocessible_entity
     end
   end
 

@@ -86,6 +86,7 @@ export default class LineItems extends React.Component {
             <tr>
               <th>Date Added</th>
               <th>Name</th>
+              <th>Unit Price</th>
               <th>Quantity</th>
               <th>Price</th>
               <th>Actions</th>
@@ -94,7 +95,7 @@ export default class LineItems extends React.Component {
           <tbody>
             {lineItems}
             <tr className="total-line">
-              <td colSpan="2"></td>
+              <td colSpan="3"></td>
               <td className="total-label">Total:</td>              
               <td className="total">{amountFormat(this.total())}</td>
               <td></td>

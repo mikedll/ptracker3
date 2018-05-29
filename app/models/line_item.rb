@@ -14,7 +14,8 @@ class LineItem < ApplicationRecord
   end
 
   def _calculate_price
-    self.price = item.unit_price * quantity
+    self.unit_price = item.unit_price
+    self.price = unit_price * quantity
   end
 
 end

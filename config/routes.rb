@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
 
+  resource :session, :only => [:update]
+  resolve('Session') { [:session] }
+
   resources :purchase_orders, :only => [:index, :show, :create] do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
-  resources :items, :only => [:index] do
+  resources :items, :only => [:index, :update] do
     collection do
       get :autocomplete
     end
