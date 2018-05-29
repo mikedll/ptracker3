@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppRoutes } from 'support/appRoutes';
+import { Helmet } from 'react-helmet';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
 import Paginator from './paginator';
@@ -40,6 +41,9 @@ export default class PurchaseOrders extends React.Component {
     
     return (
       <div>
+        <Helmet>
+          <title>Purchase Orders</title>
+        </Helmet>
         <h1>Purchase Orders</h1>
         {posTable}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.purchaseOrders}/>
