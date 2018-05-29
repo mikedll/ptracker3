@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 import { amountFormat, MomentFormats } from 'support/utils';
 import moment from 'moment';
@@ -52,6 +53,9 @@ export default class PurchaseOrder extends React.Component {
   asDetailed() {
     return (
       <div>
+        <Helmet>
+          <title>{this.state.purchaseOrder.title} Purchase Order</title>
+        </Helmet>
         <h3>{this.state.purchaseOrder.title}</h3>
         <LineItems data={this.state.purchaseOrder.line_items} purchase_order={this.state.purchaseOrder}/>;
       </div>

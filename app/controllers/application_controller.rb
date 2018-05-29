@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
 
+  attr_accessor :server_side_title
+
   before_action :_capture_controller
   after_action :_no_cache_for_json
   around_action :_tzinfo
@@ -12,9 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def _capture_controller
-    @link_info = {
-      :controller => controller_name
-    }
+    @controller = self
   end
 
   def _no_cache_for_json

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { Redirect } from 'react-router-dom';
 import update from 'immutability-helper';
 import _ from 'underscore';
@@ -209,6 +210,9 @@ export default class Items extends React.Component {
     
     return (
       <div>
+        <Helmet>
+          <title>Item Catalogue</title>
+        </Helmet>
         <h1>Item Catalogue</h1>
         <input type="text" onChange={this.handleSearchChange} defaultValue={this.state.mostRecentSearch} name="search" className="mb"/>
         {itemsList}
