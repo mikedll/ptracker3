@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_15_121926) do
+ActiveRecord::Schema.define(version: 2018_05_30_015132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "customers", force: :cascade do |t|
+    t.string "first_name", default: "", null: false
+    t.string "middle_initial", default: "", null: false
+    t.string "last_name", default: "", null: false
+    t.string "address1", default: "", null: false
+    t.string "city", default: "", null: false
+    t.string "state", default: "", null: false
+    t.string "zip_code", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -39,6 +51,7 @@ ActiveRecord::Schema.define(version: 2018_05_15_121926) do
     t.decimal "total", precision: 8, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "customer_id"
   end
 
 end

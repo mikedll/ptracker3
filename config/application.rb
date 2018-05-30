@@ -17,5 +17,14 @@ module Reactexperiments
     # the framework and any gems in your application.
 
     config.time_zone = 'Pacific Time (US & Canada)'
+
+    config.generators do |g|
+      g.test_framework  :rspec, :fixture => false
+      g.helper          false
+      g.view_specs      false
+      g.helper_specs    false
+      g.stylesheets     false
+      g.javascripts     false
+    end
   end
 end
