@@ -1,6 +1,13 @@
 
-$highlight-color: #A9DFBF;
-  
+
+table.purchase-orders {
+  table {
+    th:nth-child(1) { width: 70%; }
+    th:nth-child(2) { width: 15%; }
+    th:nth-child(3) { width: 15%; }
+    th:nth-child(4) { width: 10%; }
+  }  
+}
 .line_items {
 
   table {
@@ -26,11 +33,3 @@ $highlight-color: #A9DFBF;
   }
 }
 
-
-table.record-table {
-  tbody tr:hover {
-    background: $highlight-color;
-    cursor: pointer;
-  }
-}
-      

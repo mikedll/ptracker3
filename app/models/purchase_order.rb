@@ -19,7 +19,7 @@ class PurchaseOrder < ApplicationRecord
         :page => page,
         :per_page => scope.model.default_per_page
       },
-      :results => results
+      :results => results.as_json(:include => [:customer])
     }
   end
 

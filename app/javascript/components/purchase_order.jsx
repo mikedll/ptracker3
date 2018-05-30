@@ -44,6 +44,7 @@ export default class PurchaseOrder extends React.Component {
     return (
       <tr onClick={this.handleRowClick}>
         <td>{this.state.purchaseOrder.title}</td>
+        <td>{this.state.purchaseOrder.customer.first_name} {this.state.purchaseOrder.customer.last_name}</td>
         <td>{moment(this.state.purchaseOrder.date).format(MomentFormats.Time)}</td>
         <td>{amountFormat(this.state.purchaseOrder.total)}</td>
       </tr>
@@ -57,6 +58,7 @@ export default class PurchaseOrder extends React.Component {
           <title>{this.state.purchaseOrder.title} Purchase Order</title>
         </Helmet>
         <h3>{this.state.purchaseOrder.title}</h3>
+        ({this.state.purchaseOrder.customer.first_name} {this.state.purchaseOrder.customer.last_name})
         <LineItems data={this.state.purchaseOrder.line_items} purchase_order={this.state.purchaseOrder}/>;
       </div>
     );

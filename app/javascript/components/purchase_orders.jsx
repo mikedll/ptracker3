@@ -23,10 +23,11 @@ export default class PurchaseOrders extends React.Component {
     const page = this.props.recordsHelper.pageFromQuery();
 
     const posTable = (!this.state.queryResult) ? <Loader/> : (
-      <table className="table table-bordered record-table">
+      <table className="table table-bordered record-table purchase-orders">
         <thead>
           <tr>
             <th>Title</th>
+            <th>Customer</th>
             <th>Date</th>
             <th>Total</th>
           </tr>
