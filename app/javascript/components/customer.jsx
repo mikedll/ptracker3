@@ -33,7 +33,13 @@ export default class Customer extends React.Component {
     e.preventDefault();
     this.setState({redirect: true});
   }
-  
+
+  address() {
+    return (this.state.customer.address1 + ", "
+            + this.state.customer.city
+            + ", " + this.state.customer.state
+            + " " + this.state.customer.zip_code);
+  }
   render() {
     if(!this.state.customer) return (<Loader row={this.props.row} {...(this.props.row ? {colspan: 6} : {})}/>);
 
@@ -55,9 +61,11 @@ export default class Customer extends React.Component {
         <h3>{this.state.customer.first_name} {this.state.customer.last_name}</h3>
         <div>
           <div>Address:</div>
-          <div>{this.state.customer.addresss1}</div>
-          <div>{this.state.customer.city}, {this.state.customer.state} {this.state.customer.zip_code}</div>          
+          <div>
+            {this.address()}
+          </div>          
         </div>
+        <br/>
         <div>
           This customer has the following purchase orders:
           <ul>
