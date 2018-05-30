@@ -9,10 +9,10 @@ class CustomersController < ApplicationController
   end
 
   def show
-    @record = Customer.find(params[:id])
+    @record = Customer.find(params[:id]).as_json(include: [:purchase_orders])
     respond_to do |format|
       format.html { render 'shared/app_root', :locals => { :multiplicity => :singular } }
-      format.json { render :json => @record.as_json(include: [:purchase_orders]) }
+      format.json { render :json => @record }
     end
   end
 

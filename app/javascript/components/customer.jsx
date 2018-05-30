@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { AppRoutes } from 'support/appRoutes';
 import Loader from './loader';
@@ -10,10 +10,15 @@ export default class Customer extends React.Component {
     super(props);
 
     this.state = {
-      customer: null
+      customer: this.props.row ? this.props.record : null,
+      redirect: false
     };
 
-    this.state.customer = this.props.recordsHelper.consumeSingularBootstrap();
+    if(!this.state.customer && this.props.recordsHelper) {
+      this.state.customer = this.props.recordsHelper.consumeSingularBootstrap();
+    }
+    
+    this.handleRowClick = this.handleRowClick.bind(this);
 
     if(!this.state.customer)
       $.ajax({
@@ -24,17 +29,37 @@ export default class Customer extends React.Component {
     
   }
 
+  handleRowClick(e) {
+    e.preventDefault();
+    this.setState({redirect: true});
+  }
+  
   render() {
-    if(!this.state.customer) return (<Loader row={true} colspan={3}/>);
-    
-    return (
+    if(!this.state.customer) return (<Loader row={this.props.row} {...(this.props.row ? {colspan: 6} : {})}/>);
+
+    if(this.state.redirect) return <Redirect push to={AppRoutes.customer(this.state.customer.id)}/>;
+    return this.props.row ? (
+      <tr key={this.state.customer.id} onClick={this.handleRowClick}>
+        <td>{this.state.customer.first_name}</td>
+        <td>{this.state.customer.last_name}</td>
+        <td>{this.state.customer.address1}</td>
+        <td>{this.state.customer.city}</td>
+        <td>{this.state.customer.state}</td>
+        <td>{this.state.customer.zip_code}</td>
+      </tr>
+    ) : (
       <div>
         <Helmet>
           <title>Customer - {this.state.customer.first_name} {this.state.customer.last_name}</title>
         </Helmet>
         <h3>{this.state.customer.first_name} {this.state.customer.last_name}</h3>
         <div>
-          Purchase Orders this customer has:
+          <div>Address:</div>
+          <div>{this.state.customer.addresss1}</div>
+          <div>{this.state.customer.city}, {this.state.customer.state} {this.state.customer.zip_code}</div>          
+        </div>
+        <div>
+          This customer has the following purchase orders:
           <ul>
             {this.state.customer.purchase_orders.map(function(po) { return (<li>
               <Link to={AppRoutes.purchaseOrder(po.id)}>{po.title}</Link>

@@ -1,5 +1,15 @@
 $highlight-color: #A9DFBF;
 
+$bg-color1: #038c99;
+$fore-color1: #e0ffff;
+$bg-color2: #e27222;
+
+h1, h2, h3 {
+  padding: 0.3em;
+  background: $bg-color1;
+  color: $fore-color1;
+}
+    
 table.record-table {
   tbody tr:hover {
     background: $highlight-color;

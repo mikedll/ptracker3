@@ -3,7 +3,7 @@ var AppRoutes = {
   root: '/',
   itemsAutocomplete: '/items/autocomplete',
   customers: '/customers',
-  customer: function(id) { return '/customers' + id; },
+  customer: function(id) { return '/customers/' + id; },
   purchaseOrders: '/purchase_orders',
   purchaseOrder: (id) => '/purchase_orders/' + id,
   lineItems: function(po_id) {

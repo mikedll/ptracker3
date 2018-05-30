@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { AppRoutes } from 'support/appRoutes';
 import Loader from './loader';
 import Paginator from './paginator';
+import Customer from './customer';
 
 export default class Customers extends React.Component {
 
@@ -14,6 +15,7 @@ export default class Customers extends React.Component {
     };
 
     this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
+
   }
 
   render() {
@@ -25,19 +27,12 @@ export default class Customers extends React.Component {
 
     const rows = (!this.state.queryResult) ? null : this.state.queryResult.results.map((c) => {
       return (
-        <tr key={c.id}>
-          <td>{c.first_name}</td>
-          <td>{c.last_name}</td>
-          <td>{c.address1}</td>
-          <td>{c.city}</td>
-          <td>{c.state}</td>
-          <td>{c.zip_code}</td>
-        </tr>
+        <Customer row={true} record={c}/>
       );
     });
     
     const csTable = (!this.state.queryResult) ? <Loader/> : (
-      <table className="table table-bordered customers">
+      <table className="table table-bordered record-table customers">
         <thead>
           <tr>
             <th>First Name</th>
@@ -59,7 +54,7 @@ export default class Customers extends React.Component {
         <Helmet>
           <title>Customers - Page {'' + page}</title>
         </Helmet>
-        <h3>Customers</h3>
+        <h1>Customers</h1>
         {csTable}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.customers}/>          
       </div>
