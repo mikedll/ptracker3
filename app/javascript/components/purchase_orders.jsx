@@ -1,6 +1,7 @@
 import React from 'react';
-import { AppRoutes } from 'support/appRoutes';
 import { Helmet } from 'react-helmet';
+
+import { AppRoutes } from 'support/appRoutes';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
 import Paginator from './paginator';

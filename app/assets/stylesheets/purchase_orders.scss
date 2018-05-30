@@ -1,13 +1,12 @@
 
 
 table.purchase-orders {
-  table {
-    th:nth-child(1) { width: 70%; }
-    th:nth-child(2) { width: 15%; }
-    th:nth-child(3) { width: 15%; }
-    th:nth-child(4) { width: 10%; }
-  }  
+  th:nth-child(1) { width: 55%; }
+  th:nth-child(2) { width: 15%; }
+  th:nth-child(3) { width: 15%; }
+  th:nth-child(4) { width: 15%; }
 }
+      
 .line_items {
 
   table {
