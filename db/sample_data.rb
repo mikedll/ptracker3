@@ -53,8 +53,8 @@ elapsed_time = Benchmark.measure do
     po2.line_items.create(p)
   end
 
-  item_count = 9000
-  pos = 3000
+  item_count = 200
+  pos = 300
   customers = (pos * 0.8).to_i # 80% of pos
 
   # Hardcore creation.
