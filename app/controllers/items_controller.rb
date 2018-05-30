@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
 
+  MAX_AUTOCOMPLETE = 15 # otherwise jqueryUI can't handle it
+
   def index
     @query_result = Item.search(params[:s], params[:page])
     respond_to do |format|
@@ -18,7 +20,7 @@ class ItemsController < ApplicationController
   end
 
   def autocomplete
-    @items = Item.by_name(params[:term])
+    @items = Item.by_name(params[:term]).limit(MAX_AUTOCOMPLETE)
     render json: @items.map { |i| {:value => i.as_json, :label => "#{i.name} ($#{i.unit_price})"} }
   end
 

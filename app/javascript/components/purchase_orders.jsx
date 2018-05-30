@@ -1,6 +1,7 @@
 import React from 'react';
-import { AppRoutes } from 'support/appRoutes';
 import { Helmet } from 'react-helmet';
+
+import { AppRoutes } from 'support/appRoutes';
 import PurchaseOrder from './purchase_order';
 import Loader from './loader';
 import Paginator from './paginator';
@@ -23,10 +24,11 @@ export default class PurchaseOrders extends React.Component {
     const page = this.props.recordsHelper.pageFromQuery();
 
     const posTable = (!this.state.queryResult) ? <Loader/> : (
-      <table className="table table-bordered record-table">
+      <table className="table table-bordered record-table purchase-orders">
         <thead>
           <tr>
             <th>Title</th>
+            <th>Customer</th>
             <th>Date</th>
             <th>Total</th>
           </tr>

@@ -2,6 +2,7 @@ class PurchaseOrder < ApplicationRecord
 
   paginates_per 10
 
+  belongs_to :customer, :inverse_of => 'purchase_orders'
   has_many :line_items, :inverse_of => 'purchase_order', :dependent => :destroy
 
   scope :ordered, -> { order(:created_at) }
@@ -18,7 +19,7 @@ class PurchaseOrder < ApplicationRecord
         :page => page,
         :per_page => scope.model.default_per_page
       },
-      :results => results
+      :results => results.as_json(:include => [:customer])
     }
   end
 

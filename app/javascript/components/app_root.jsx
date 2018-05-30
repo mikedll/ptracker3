@@ -61,6 +61,16 @@ const LItems = Loadable({
   loading: Loader
 });
 
+const LCustomers = Loadable({
+  loader: () => import(/* webpackChunkName: "customers" */'./customers'),
+  loading: Loader
+});
+
+const LCustomer = Loadable({
+  loader: () => import(/* webpackChunkName: "customer" */'./customer'),
+  loading: Loader
+});
+
 class AppRoot extends React.Component {
 
   constructor(props) {
@@ -110,12 +120,14 @@ class AppRoot extends React.Component {
               <ul className="navbar-nav">
                 <MenuLink to={AppRoutes.purchaseOrders} label='Purchase Orders'/>
                 <MenuLink to={AppRoutes.items} label='Items'/>
+                <MenuLink to={AppRoutes.customers} label='Customers'/>
               </ul>
             </div>
           </nav>
           <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/welcome" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>        
+          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/items" component={LItems} recordsHelper={this.recordsHelper}/>
        
