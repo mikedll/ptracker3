@@ -71,6 +71,11 @@ const LCustomer = Loadable({
   loading: Loader
 });
 
+const LNewPurchaseOrder = Loadable({
+  loader: () => import(/* webpackChunkName: new_purchase_order*/ './new_purchase_order'),
+  loading: Loader
+});
+
 class AppRoot extends React.Component {
 
   constructor(props) {
@@ -125,7 +130,8 @@ class AppRoot extends React.Component {
             </div>
           </nav>
           <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+        <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="LNewPurchaseOrder" component={LPurchaseOrders}/>
           <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>

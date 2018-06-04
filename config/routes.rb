@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resource :session, :only => [:update]
   resolve('Session') { [:session] }
 
-  resources :purchase_orders, :only => [:index, :show, :create] do
+  resources :purchase_orders, :only => [:index, :show, :new, :create] do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
