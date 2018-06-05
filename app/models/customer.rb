@@ -8,6 +8,7 @@ class Customer < ApplicationRecord
 
   validates :state, :length => { :maximum => 2 }
 
+  scope :by_name, ->(s){ where("(LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?)", "%#{s.downcase}%", "%#{s.downcase}%") }
   scope :ordered, -> { order(:created_at) }
 
   def self.search(page)

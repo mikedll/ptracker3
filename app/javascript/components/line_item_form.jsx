@@ -59,9 +59,11 @@ export default class LineItemForm extends React.Component {
                   update(prevState, {[name]: {$set: value}})
                  );
   }
+  
   valid() {
     return this.state.item_id && this.state.added_at && this.state.quantity && !isNaN(parseFloat(this.state.quantity));
   }
+  
   handleSubmit(e) {
     var $this = this;
     e.preventDefault();

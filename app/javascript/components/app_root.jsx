@@ -4,7 +4,8 @@ import {
   BrowserRouter,
   StaticRouter,
   Route,
-  Link
+  Link,
+  Switch
 } from 'react-router-dom';
 
 import { RecordsHelper } from 'support/recordsHelper';
@@ -71,6 +72,11 @@ const LCustomer = Loadable({
   loading: Loader
 });
 
+const LNewPurchaseOrder = Loadable({
+  loader: () => import(/* webpackChunkName: "new_purchase_order" */ './new_purchase_order'),
+  loading: Loader
+});
+
 class AppRoot extends React.Component {
 
   constructor(props) {
@@ -109,7 +115,7 @@ class AppRoot extends React.Component {
     return (
       <Router path={this.props.path}>
         <div>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <Route path={AppRoutes.root} exact children={() => (
               <Link className="navbar-brand" to={AppRoutes.root}>Home</Link>
             )}/>
@@ -118,18 +124,33 @@ class AppRoot extends React.Component {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
-                <MenuLink to={AppRoutes.purchaseOrders} label='Purchase Orders'/>
+                <li className="nav-item dropdown">
+                  <a className='nav-link dropdown-toggle' href='#' role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Purchase Orders
+                  </a>
+                  <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <Route exact path={AppRoutes.purchaseOrders} children={({ match }) => (
+                      <Link className={'dropdown-item' + (match ? ' active' : '')} to={AppRoutes.purchaseOrders}>List All</Link>
+                    )}/>
+                    <Route exact path={AppRoutes.newPurchaseOrder} children={({ match }) => (
+                      <Link className={'dropdown-item' + (match ? ' active' : '')} to={AppRoutes.newPurchaseOrder}>Create New</Link>
+                    )}/>                    
+                  </div>
+                </li>
                 <MenuLink to={AppRoutes.items} label='Items'/>
                 <MenuLink to={AppRoutes.customers} label='Customers'/>
               </ul>
             </div>
-          </nav>
+        </nav>
+        <Switch>
           <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+          <PropsRoute exact path="/purchase_orders/new" flash_error={this.props.flash_error} component={LNewPurchaseOrder}/>
           <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/items" component={LItems} recordsHelper={this.recordsHelper}/>
+        </Switch>
        
         </div>
       </Router>
