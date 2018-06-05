@@ -7,7 +7,7 @@ class PurchaseOrdersController < ApplicationController
   def create
     @purchase_order = PurchaseOrder.new(:date => Time.zone.now,
                                         :title => params[:title],
-                                        :customer_id => params[:customer_idxxx])
+                                        :customer_id => params[:customer_id])
 
     if @purchase_order.save
       redirect_to purchase_order_path(@purchase_order)

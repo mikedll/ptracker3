@@ -83,8 +83,7 @@ class AppRoot extends React.Component {
     super(props);
 
     this.state = {
-      session_info: props.session_info,
-      flash_error: props.flash_error
+      session_info: props.session_info
     };
     
     this.recordsHelper = new RecordsHelper(_.pick(this.props, 'query_result', 'record'));
@@ -145,7 +144,7 @@ class AppRoot extends React.Component {
         </nav>
         <Switch>
           <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/purchase_orders/new" component={LNewPurchaseOrder}/>
+          <PropsRoute exact path="/purchase_orders/new" flash_error={this.props.flash_error} component={LNewPurchaseOrder}/>
           <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
           <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
