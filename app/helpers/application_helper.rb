@@ -8,6 +8,10 @@ module ApplicationHelper
     }
   end
 
+  def flash_error
+    flash.now[:error]
+  end
+
   def title_from_prerender
     @controller.server_side_title
   end

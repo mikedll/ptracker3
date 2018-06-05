@@ -83,7 +83,8 @@ class AppRoot extends React.Component {
     super(props);
 
     this.state = {
-      session_info: props.session_info
+      session_info: props.session_info,
+      flash_error: props.flash_error
     };
     
     this.recordsHelper = new RecordsHelper(_.pick(this.props, 'query_result', 'record'));

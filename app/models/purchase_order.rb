@@ -5,6 +5,7 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :customer, :inverse_of => 'purchase_orders'
   has_many :line_items, :inverse_of => 'purchase_order', :dependent => :destroy
 
+  scope :with_customer, ->{ includes(:customer)}
   scope :ordered, -> { order(:created_at) }
   scope :with_line_items, -> { includes(line_items: [:item]) }
 
