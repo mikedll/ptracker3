@@ -1,5 +1,9 @@
 class PurchaseOrdersController < ApplicationController
 
+  def new
+    render 'shared/app_root'
+  end
+
   def index
     @query_result = PurchaseOrder.search(params[:page])
     respond_to do |format|

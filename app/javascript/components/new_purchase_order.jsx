@@ -7,7 +7,9 @@ export default class NewPurchaseOrder extends React.Component {
     super(props);
 
     this.state = {
-      title: ''
+      title: '',
+      customer: '',
+      customer_id: null
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,10 +29,14 @@ export default class NewPurchaseOrder extends React.Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Create New Purchase Order</title>
+        </Helmet>
+        <h1>Create New Purchase Order</h1>
         <form className="form-inline" onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="col">
-              <input type="text" className="form-control" placeholder="Name" value={this.state.title} onChange={this.handleChange}/>            
+              <input type="text" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>            
             </div>
             <div className="col">
               <input type="text" className="form-control" placeholder="Customer" value={this.state.customer} onChange={this.handleChange}/>            

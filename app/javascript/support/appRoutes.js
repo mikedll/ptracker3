@@ -6,6 +6,7 @@ var AppRoutes = {
   customer: function(id) { return '/customers/' + id; },
   purchaseOrders: '/purchase_orders',
   purchaseOrder: (id) => '/purchase_orders/' + id,
+  newPurchaseOrder: '/purchase_orders/new',
   lineItems: function(po_id) {
     return '/purchase_orders/' + po_id + '/line_items';
   },
