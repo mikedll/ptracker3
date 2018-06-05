@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
 
-  MAX_AUTOCOMPLETE = 15 # otherwise jqueryUI can't handle it
+  MAX_AUTOCOMPLETE = 30 # otherwise jqueryUI can't handle it
 
   def index
     @query_result = Item.search(params[:s], params[:page])

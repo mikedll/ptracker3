@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { AppRoutes } from 'support/appRoutes';
 
 export default class NewPurchaseOrder extends React.Component {
   constructor(props) {
@@ -8,14 +9,31 @@ export default class NewPurchaseOrder extends React.Component {
 
     this.state = {
       title: '',
-      customer: '',
-      customer_id: null
+      customer: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    var $this = this;
+    this.$el = $(this.el);
+    this.$el.find('input[name=customer]').autocomplete({
+      source: AppRoutes.customersAutocomplete,
+      minLength: 2,
+      select: function(event, ui) {
+        event.preventDefault();
+        event.target.value = ui.item.value.name;
+        $this.setState({ customer: ui.item.value });
+      }
+    });
+  }
+  
+  componentWillUnmount() {
+    this.$el.find('input[name=customer]').autocomplete('destroy');
+  }
+  
   handleChange(e) {
     const target = e.target;
     const name = target.name;
@@ -29,7 +47,7 @@ export default class NewPurchaseOrder extends React.Component {
   
   render() {
     return (
-      <div>
+      <div ref={el => this.el = el}>
         <Helmet>
           <title>Create New Purchase Order</title>
         </Helmet>
@@ -39,7 +57,7 @@ export default class NewPurchaseOrder extends React.Component {
             <input type="text" name="title" className="form-control" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>
           </div>
           <div className="col-auto">
-            <input type="text" name="customer" className="form-control" placeholder="Customer" value={this.state.customer} onChange={this.handleChange}/>
+            <input type="text" name="customer" className="form-control" placeholder="Customer" onChange={this.handleChange}/>
           </div>
           <div className="col-auto">
             <button className="btn btn-primary" type="submit">Create</button>

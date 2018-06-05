@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     resources :line_items, :only => [:create, :update, :destroy]
   end
 
-  resources :customers, :only => [:index, :show]
+  resources :customers, :only => [:index, :show] do
+    collection do
+      get :autocomplete
+    end
+  end
 
   resources :items, :only => [:index, :update] do
     collection do
