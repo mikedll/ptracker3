@@ -4,8 +4,10 @@ var AppRoutes = {
   itemsAutocomplete: '/items/autocomplete',
   customers: '/customers',
   customer: function(id) { return '/customers/' + id; },
+  customersAutocomplete: '/customers/autocomplete',
   purchaseOrders: '/purchase_orders',
   purchaseOrder: (id) => '/purchase_orders/' + id,
+  newPurchaseOrder: '/purchase_orders/new',
   lineItems: function(po_id) {
     return '/purchase_orders/' + po_id + '/line_items';
   },

@@ -1,2 +1,2 @@
-= react_component 'app_root', { path: request.path, session_info: session_info}.merge(defined?(multiplicity) && multiplicity == :singular ? {record: @record} : {query_result: @query_result}), prerender: true
+= react_component 'app_root', { path: request.path, session_info: session_info, flash_error: flash_error}.merge((@record.nil? && @query_result.nil? ? {} : defined?(multiplicity) && multiplicity == :singular ? {record: @record} : {query_result: @query_result})), prerender: true
   

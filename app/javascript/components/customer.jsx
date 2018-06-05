@@ -69,7 +69,7 @@ export default class Customer extends React.Component {
         <div>
           This customer has the following purchase orders:
           <ul>
-            {this.state.customer.purchase_orders.map(function(po) { return (<li>
+            {this.state.customer.purchase_orders.map(function(po) { return (<li key={po.id}>
               <Link to={AppRoutes.purchaseOrder(po.id)}>{po.title}</Link>
             </li>); } )}
           </ul>
