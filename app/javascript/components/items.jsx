@@ -15,16 +15,14 @@ export default class Items extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      queryResult: null,
+      queryResult: this.props.recordsHelper.consumePluralBootstrap(),
       selected_item_id: null,
       selectedItemUnitPrice: null,
       editingItem: false,
-      searching: false,
-      mostRecentSearch: ''
+      searching: false
     };
-    
-    this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
-    this.state.mostRecentSearch = _.defaults(this.props.recordsHelper.getUrlQueryAsObj(), {s: ''}).s;
+
+    this.props.recordsHelper.setDefaultMostRecentSearch(this);
 
     this.unitPriceEl = null;
     this.editButtonEl = null;
@@ -110,37 +108,9 @@ export default class Items extends React.Component {
   }
 
   handleSearchChange(e) {
-    e.preventDefault();
-    const sQuery = e.target.value;
-    
-    if(!this.state.searching && (sQuery.length > 2 || this.state.mostRecentSearch !== '')) {
-      this.setState({searching: true});
-      $.ajax({url: AppRoutes.items,
-              data: { s: (sQuery.length > 2) ? sQuery : '' },
-              dataType: 'JSON',
-              success: (data) => {
-                this.setState((prevState, prevProps) => {
-                  const nextState = {
-                    queryResult: data,
-                    selected_item_id: null,
-                    redirectToSearch: true,
-                    searching: false,
-                    mostRecentSearch: _.defaults(data.info.query, {s: ''}).s
-                  };
-                  
-                  if(nextState.queryResult.results.length > 0) {
-                    nextState.selected_item_id = nextState.queryResult.results[0].id;
-                  }
-
-                  prevProps.history.replace(AppRoutes.items + '?' + serializeObj(Object.assign({}, this.props.recordsHelper.getUrlQueryAsObj(), {
-                    s: nextState.mostRecentSearch,
-                    page: nextState.queryResult.info.page
-                  })));
-                  return nextState;
-                });
-              }
-             });
-    }
+    this.props.recordsHelper.handleSearchChange(this, e, AppRoutes.items, (nextState) => {
+      nextState.selected_item_id = (nextState.queryResult.results.length > 0) ? nextState.queryResult.results[0].id : null;      
+    });    
   }
   
   currentItem() {
@@ -174,7 +144,6 @@ export default class Items extends React.Component {
     }
     
     const page = this.props.recordsHelper.pageFromQuery();
-    const urlQuery = this.props.recordsHelper.getUrlQueryAsObj();
 
     const itemView = !this.state.editingItem ?
       (
@@ -214,9 +183,9 @@ export default class Items extends React.Component {
           <title>Item Catalogue</title>
         </Helmet>
         <h1>Item Catalogue</h1>
-        <input type="text" onChange={this.handleSearchChange} defaultValue={this.state.mostRecentSearch} name="search" className="mb"/>
+        <input type="text" onChange={this.handleSearchChange} placeholder="Search" defaultValue={this.state.mostRecentSearch} name="search" className="mb"/>
         {itemsList}
-        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items} urlQuery={urlQuery}/>
+        <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import { getUrlParameter, getUrlQueryAsObj } from 'support/urlHelper';
+import { serializeObj, getUrlParameter, getUrlQueryAsObj } from 'support/urlHelper';
 import _ from 'underscore';
 
 class RecordsHelper
@@ -28,6 +28,17 @@ class RecordsHelper
       return null
 
     bootstrap
+
+  #
+  # Computes and assigns the mostRecentSearch state variable
+  # on a given component.
+  #
+  setDefaultMostRecentSearch: (component) ->
+    component.state.mostRecentSearch = _.defaults({},
+      @getUrlQueryAsObj(),
+      if component.state.queryResult? and component.state.queryResult.info? then component.state.queryResult.info.query else {},
+      {s: ''}
+    ).s
 
   #
   # Assumes @isPlural == true
@@ -60,5 +71,50 @@ class RecordsHelper
       dataType: 'JSON'
       success: success
     })
+
+  #
+  # Modifies state of a component that supports iterative search.
+  #
+  # Requires that it support these state variables:
+  #
+  #   queryResult, searching, mostRecentSearch
+  #
+  # Requires that calling component have a recordsHelper on its props.
+  #
+  # Parameters:
+  #   component - component to modify
+  #   e - onChange event
+  #   searchPath - path on serve to send new search query
+  #   onSuccess - callback executed on successful search, which take nextState as a
+  # parameter so that the component can modify it as needed, for example to select
+  # an item from the search result for use in another GUI widget on the page.
+  #
+  handleSearchChange: (component, e, searchPath, onSuccess) ->
+    sQuery = e.target.value
+
+    if(!component.state.searching and (sQuery.length > 2 || (component.state.mostRecentSearch != '' and component.state.mostRecentSearch != sQuery)))
+      component.setState(searching: true);
+      $.ajax(
+        url: searchPath,
+        data:
+          s: if (sQuery.length > 2) then sQuery else '',
+        dataType: 'JSON',
+        success: (data) =>
+          component.setState((prevState, prevProps) =>
+            nextState =
+              queryResult: data,
+              searching: false,
+              mostRecentSearch: _.defaults(data.info.query, {s: ''}).s
+
+            onSuccess(nextState) if onSuccess?
+
+            prevProps.history.replace(searchPath + '?' + serializeObj(Object.assign({}, @getUrlQueryAsObj(), {
+              s: nextState.mostRecentSearch,
+              page: nextState.queryResult.info.page
+            })))
+
+            nextState
+          )
+      )
 
 export { RecordsHelper }

@@ -18,7 +18,7 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @query_result = PurchaseOrder.with_customer.search(params[:page])
+    @query_result = PurchaseOrder.with_customer.search(params[:s], params[:page])
     respond_to do |format|
       format.html { render 'shared/app_root' }
       format.json { render :json => @query_result }

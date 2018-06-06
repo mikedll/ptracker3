@@ -5,12 +5,8 @@ import { serializeObj } from 'support/urlHelper';
 
 class Paginator extends React.Component {
 
-  serialize(obj) {
-    return serializeObj(obj);
-  }
-
   item(key, text, page, active, disabled) {
-    const queryString = this.serialize(Object.assign({}, this.props.urlQuery, {page: page}));
+    const queryString = serializeObj(Object.assign({}, this.props.query, {page: page}));
     return (
       <li key={'page-' + key} className={'page-item' + (active ? ' active' : '') + (disabled ? ' disabled' : '')}>
         <Link {...(disabled ? { onClick: (e) => (e.preventDefault()) } : {})} className="page-link" to={this.props.path + (disabled ? '#' : '?' + queryString)}>{text}</Link>

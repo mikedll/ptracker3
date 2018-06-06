@@ -10,12 +10,19 @@ export default class PurchaseOrders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      queryResult: null
+      queryResult: this.props.recordsHelper.consumePluralBootstrap(),
+      searching: false
     };
 
-    this.state.queryResult = this.props.recordsHelper.consumePluralBootstrap();
+    this.props.recordsHelper.setDefaultMostRecentSearch(this);
+
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
+  handleSearchChange(e) {
+    this.props.recordsHelper.handleSearchChange(this, e, AppRoutes.purchaseOrders);
+  }
+  
   render() {
     if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
       this.props.recordsHelper.fetchPage(AppRoutes.purchaseOrders, (data) => this.setState({queryResult: data}));
@@ -47,6 +54,7 @@ export default class PurchaseOrders extends React.Component {
           <title>Purchase Orders - Page {"" + page}</title>
         </Helmet>
         <h1>Purchase Orders</h1>
+        <input name="search" type="text" placeholder="Search" defaultValue={this.state.mostRecentSearch} onChange={this.handleSearchChange} className="mb"/>
         {posTable}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.purchaseOrders}/>
       </div>
