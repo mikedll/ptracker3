@@ -18,7 +18,7 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @query_result = PurchaseOrder.with_customer.search(params[:page])
+    @query_result = PurchaseOrder.with_customer.search(search_params)
     respond_to do |format|
       format.html { render 'shared/app_root' }
       format.json { render :json => @query_result }
@@ -31,5 +31,11 @@ class PurchaseOrdersController < ApplicationController
       format.html { render 'shared/app_root', :locals => { :multiplicity => :singular } }
       format.json { render :json => @record }
     end
+  end
+
+  protected
+
+  def search_params
+    params.permit(:t, :mt, :page)
   end
 end

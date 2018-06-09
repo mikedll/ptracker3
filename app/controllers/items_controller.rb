@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   MAX_AUTOCOMPLETE = 30 # otherwise jqueryUI can't handle it
 
   def index
-    @query_result = Item.search(params[:s], params[:page])
+    @query_result = Item.search(search_params)
     respond_to do |format|
       format.html { render 'shared/app_root' }
       format.json { render :json => @query_result }
@@ -25,6 +25,10 @@ class ItemsController < ApplicationController
   end
 
   protected
+
+  def search_params
+    params.permit(:n, :page)
+  end
 
   def item_params
     params.require(:item).permit(:unit_price)
