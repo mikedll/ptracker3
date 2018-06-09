@@ -141,17 +141,18 @@ class AppRoot extends React.Component {
                 <MenuLink to={AppRoutes.customers} label='Customers'/>
               </ul>
             </div>
-        </nav>
-        <Switch>
-          <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/purchase_orders/new" flash_error={this.props.flash_error} component={LNewPurchaseOrder}/>
-          <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>
-          <PropsRoute exact path="/items" component={LItems} recordsHelper={this.recordsHelper}/>
-        </Switch>
-       
+          </nav>
+          <div className="container-fluid">
+            <Switch>
+              <PropsRoute exact path="/" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+              <PropsRoute exact path="/purchase_orders/new" flash_error={this.props.flash_error} component={LNewPurchaseOrder}/>
+              <PropsRoute exact path="/purchase_orders" component={LPurchaseOrders} recordsHelper={this.recordsHelper}/>
+              <PropsRoute exact path="/customers" component={LCustomers} recordsHelper={this.recordsHelper}/>
+              <PropsRoute exact path="/customers/:id" component={LCustomer} recordsHelper={this.recordsHelper}/>
+              <PropsRoute exact path="/purchase_orders/:id" component={LPurchaseOrder} recordsHelper={this.recordsHelper}/>
+              <PropsRoute exact path="/items" component={LItems} recordsHelper={this.recordsHelper}/>
+            </Switch>
+          </div>       
         </div>
       </Router>
     );
