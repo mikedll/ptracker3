@@ -22,6 +22,7 @@ export default class Items extends React.Component {
       searching: false
     };
 
+    this.defaultQuery = {n: ''};
     this.props.recordsHelper.setDefaultMostRecentSearch(this);
 
     this.unitPriceEl = null;
@@ -108,9 +109,19 @@ export default class Items extends React.Component {
   }
 
   handleSearchChange(e) {
-    this.props.recordsHelper.handleSearchChange(this, e, AppRoutes.items, (nextState) => {
+    const formQuery = {
+      n: e.target.value
+    };
+
+    // Check if form has changed and is complex enough to merit a new search to the server.
+    if(this.state.mostRecentQuery.n === formQuery.n ||
+       (formQuery.n.length <= 2 && this.state.mostRecentQuery.n.length <= 2)) return;
+
+    if(formQuery.n.length <= 2) formQuery.n = '';
+
+    this.props.recordsHelper.handleSearchChange(this, formQuery, AppRoutes.items, (nextState) => {
       nextState.selected_item_id = (nextState.queryResult.results.length > 0) ? nextState.queryResult.results[0].id : null;      
-    });    
+    });
   }
   
   currentItem() {
@@ -183,7 +194,7 @@ export default class Items extends React.Component {
           <title>Item Catalogue</title>
         </Helmet>
         <h1>Item Catalogue</h1>
-        <input type="text" onChange={this.handleSearchChange} placeholder="Search" defaultValue={this.state.mostRecentSearch} name="search" className="mb"/>
+        <input type="text" onChange={this.handleSearchChange} placeholder="Search" defaultValue={this.state.mostRecentQuery.n} name="name" className="mb"/>
         {itemsList}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
       </div>

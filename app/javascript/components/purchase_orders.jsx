@@ -14,13 +14,37 @@ export default class PurchaseOrders extends React.Component {
       searching: false
     };
 
+    this.defaultQuery = {t: '', mt: ''};
+    this.el = null;
+    this.$el = null;
+    
     this.props.recordsHelper.setDefaultMostRecentSearch(this);
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
+  componentDidMount() {
+    this.$el = $(this.el);
+  }
+  
   handleSearchChange(e) {
-    this.props.recordsHelper.handleSearchChange(this, e, AppRoutes.purchaseOrders);
+    const formQuery = {
+      t: this.$el.find('input[name=title]').val(),
+      mt: parseFloat(this.$el.find('input[name=min_total]').val()) || ''
+    };
+
+    // Check equality of search query. If search name differs,
+    // check whether the search names are long enough to merit a new filtering.
+    if((this.state.mostRecentQuery.t === formQuery.t
+        || (formQuery.t.length <= 2 && this.state.mostRecentQuery.t.length <= 2))
+       && this.state.mostRecentQuery.mt === formQuery.mt)
+      return;
+
+    // Treat all search names that are too short as empty string searches. Should not
+    // happen unless we are clearing a (length > 2) name search.
+    if(formQuery.t.length <= 2) formQuery.t = '';
+
+    this.props.recordsHelper.handleSearchChange(this, formQuery, AppRoutes.purchaseOrders);
   }
   
   render() {
@@ -49,12 +73,19 @@ export default class PurchaseOrders extends React.Component {
     );
     
     return (
-      <div>
+      <div ref={el => this.el = el}>
         <Helmet>
           <title>Purchase Orders - Page {"" + page}</title>
         </Helmet>
         <h1>Purchase Orders</h1>
-        <input name="search" type="text" placeholder="Search" defaultValue={this.state.mostRecentSearch} onChange={this.handleSearchChange} className="mb"/>
+        <form className="form-row" action={AppRoutes.purchaseOrders} method="post" onSubmit={this.handleSubmit}>
+          <div className="col-auto">
+            <input name="title" type="text" placeholder="PO Title" defaultValue={this.state.mostRecentQuery.t} onChange={this.handleSearchChange}/>
+          </div>
+          <div className="col-auto">
+            <input name="min_total" type="text" placeholder="Min Cost" defaultValue={this.state.mostRecentQuery.mt} onChange={this.handleSearchChange}/>
+          </div>
+        </form>
         {posTable}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.purchaseOrders}/>
       </div>

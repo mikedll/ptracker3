@@ -30,18 +30,19 @@ class RecordsHelper
     bootstrap
 
   #
-  # Computes and assigns the mostRecentSearch state variable
-  # on a given component.
+  # Computes and assigns the mostRecentQuery state variable on a given
+  # component. GET parameters are overridden by the results cache in the
+  # props. Defaults are taken from component.defaultQuery, which must be defined.
   #
   setDefaultMostRecentSearch: (component) ->
-    component.state.mostRecentSearch = _.defaults({},
-      @getUrlQueryAsObj(),
-      if component.state.queryResult? and component.state.queryResult.info? then component.state.queryResult.info.query else {},
-      {s: ''}
-    ).s
+    component.state.mostRecentQuery = _.defaults(Object.assign({}, @getUrlQueryAsObj(),
+      if component.state.queryResult? and component.state.queryResult.info? then component.state.queryResult.info.query else {}),
+      component.defaultQuery)
 
   #
   # Assumes @isPlural == true
+  #
+  # Checks if page in GET parameters is out of date with the page in the results cache.
   #
   needsFetch: (cache) ->
     if !cache || (@pageFromQuery() != cache.info.page)
@@ -50,7 +51,7 @@ class RecordsHelper
     false
 
   #
-  # Does not include page.
+  # Excludes page parameter.
   #
   getUrlQueryAsObj: () ->
     if typeof(window) == "undefined"
@@ -73,45 +74,50 @@ class RecordsHelper
     })
 
   #
-  # Modifies state of a component that supports iterative search.
+  # Fires off ajax requests to the server. Modifies state property of
+  # a component that supports iterative search.
   #
-  # Requires that it support these state variables:
+  # Requires that component define defaultQuery.
   #
-  #   queryResult, searching, mostRecentSearch
+  # Requires that component support these state variables:
+  #
+  #   queryResult, searching, mostRecentQuery
   #
   # Requires that calling component have a recordsHelper on its props.
   #
   # Parameters:
   #   component - component to modify
-  #   e - onChange event
+  #   formQuery - values of the form governing search parameters
   #   searchPath - path on serve to send new search query
   #   onSuccess - callback executed on successful search, which take nextState as a
   # parameter so that the component can modify it as needed, for example to select
   # an item from the search result for use in another GUI widget on the page.
   #
-  handleSearchChange: (component, e, searchPath, onSuccess) ->
-    sQuery = e.target.value
-
-    if(!component.state.searching and (sQuery.length > 2 || (component.state.mostRecentSearch != '' and component.state.mostRecentSearch != sQuery)))
+  handleSearchChange: (component, formQuery, searchPath, onSuccess) ->
+    if(!component.state.searching)
       component.setState(searching: true);
       $.ajax(
         url: searchPath,
-        data:
-          s: if (sQuery.length > 2) then sQuery else '',
+        data: formQuery
         dataType: 'JSON',
         success: (data) =>
           component.setState((prevState, prevProps) =>
             nextState =
               queryResult: data,
               searching: false,
-              mostRecentSearch: _.defaults(data.info.query, {s: ''}).s
+              mostRecentQuery: _.defaults(data.info.query, component.defaultQuery)
 
             onSuccess(nextState) if onSuccess?
 
-            prevProps.history.replace(searchPath + '?' + serializeObj(Object.assign({}, @getUrlQueryAsObj(), {
-              s: nextState.mostRecentSearch,
-              page: nextState.queryResult.info.page
-            })))
+            nextGetParams = Object.assign({}, nextState.mostRecentQuery, { page: nextState.queryResult.info.page })
+            interestingGetParams = {}
+            for k, v of nextGetParams
+              if k == 'page'
+                interestingGetParams[k] = v if v != 1
+              else
+                interestingGetParams[k] = v if v != ''
+
+            prevProps.history.replace(searchPath + '?' + serializeObj(interestingGetParams))
 
             nextState
           )

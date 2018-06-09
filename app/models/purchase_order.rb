@@ -5,21 +5,28 @@ class PurchaseOrder < ApplicationRecord
   belongs_to :customer, :inverse_of => 'purchase_orders'
   has_many :line_items, :inverse_of => 'purchase_order', :dependent => :destroy
 
+  scope :min_cost, ->(c) { where('total > ?', c) }
   scope :by_title, ->(s) { where('LOWER(title) LIKE ?', "%#{s.downcase}%") }
   scope :with_customer, ->{ includes(:customer)}
   scope :ordered, -> { order(:created_at) }
   scope :with_line_items, -> { includes(line_items: [:item]) }
 
-  def self.search(query, page)
+  def self.search(params)
     scope = ordered
 
-    q = nil
-    if !query.blank?
-      q = query.strip
-      scope = scope.by_title(q) if !q.blank?
+    t = nil
+    if !params[:t].blank?
+      t = params[:t].strip
+      scope = scope.by_title(t) if !t.blank?
     end
 
-    page = page.to_i || 1
+    mt = nil
+    if !params[:mt].blank?
+      mt = BigDecimal.new(params[:mt])
+      scope = scope.min_cost(mt)
+    end
+
+    page = params[:page].to_i || 1
     page = 1 if page == 0
 
     results = scope.page(page)
@@ -27,7 +34,9 @@ class PurchaseOrder < ApplicationRecord
         :total => scope.count,
         :page => page,
         :per_page => scope.model.default_per_page,
-        :query => (q.blank? ? {} : { s: q })
+        :query => {}
+          .merge(t.nil? ? {} : { t: t })
+          .merge(mt.nil? ? {} : { mt: mt })
       },
       :results => results.as_json(:include => [:customer])
     }
