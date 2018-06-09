@@ -42,13 +42,12 @@ class RecordsHelper
   #
   # Assumes @isPlural == true
   #
-  # Checks if page in GET parameters is out of date with the page in the results cache.
+  # Checks if page in GET parameters is out of sync with the page in the results cache.
+  #
+  # Returns true if there is no cache.
   #
   needsFetch: (cache) ->
-    if !cache || (@pageFromQuery() != cache.info.page)
-      return true
-
-    false
+    return !cache || (@pageFromQuery() != cache.info.page)
 
   #
   # Excludes page parameter.
@@ -60,8 +59,6 @@ class RecordsHelper
       return _.omit(getUrlQueryAsObj(), 'page')
 
   pageFromQuery: () ->
-    return 1 if not @isPlural
-
     pPage = if typeof(window) == "undefined" then @props.query_result.info.page else parseInt(getUrlParameter('page'));
     if (pPage == null || isNaN(pPage)) then 1 else pPage;
 

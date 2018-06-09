@@ -194,7 +194,16 @@ export default class Items extends React.Component {
           <title>Item Catalogue</title>
         </Helmet>
         <h1>Item Catalogue</h1>
-        <input type="text" onChange={this.handleSearchChange} placeholder="Search" defaultValue={this.state.mostRecentQuery.n} name="name" className="mb"/>
+        
+        <div className="form-query form-row align-items-center">
+          <div className="col-auto">
+            Search:
+          </div>
+          <div className="col-auto">
+            <input type="text" onChange={this.handleSearchChange} placeholder="Search" defaultValue={this.state.mostRecentQuery.n} name="name" className="form-control"/>
+          </div>
+        </div>
+
         {itemsList}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.items}/>
       </div>
