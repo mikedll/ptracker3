@@ -86,7 +86,7 @@ export default class PurchaseOrders extends React.Component {
             <input name="title" type="text" placeholder="PO Title" defaultValue={this.state.mostRecentQuery.t} onChange={this.handleSearchChange} className="form-control"/>
           </div>
           <div className="col-auto">
-            <input name="min_total" type="text" placeholder="Min Cost" defaultValue={this.state.mostRecentQuery.mt} onChange={this.handleSearchChange} className="form-control"/>
+            <input name="min_total" type="text" placeholder="Min Total" defaultValue={this.state.mostRecentQuery.mt} onChange={this.handleSearchChange} className="form-control"/>
           </div>
         </div>
         {posTable}
