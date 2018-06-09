@@ -46,7 +46,7 @@ export default class PurchaseOrders extends React.Component {
 
     this.props.recordsHelper.handleSearchChange(this, formQuery, AppRoutes.purchaseOrders);
   }
-  
+
   render() {
     if(this.props.recordsHelper.needsFetch(this.state.queryResult)) {
       this.props.recordsHelper.fetchPage(AppRoutes.purchaseOrders, (data) => this.setState({queryResult: data}));
@@ -78,14 +78,17 @@ export default class PurchaseOrders extends React.Component {
           <title>Purchase Orders - Page {"" + page}</title>
         </Helmet>
         <h1>Purchase Orders</h1>
-        <form className="form-row" action={AppRoutes.purchaseOrders} method="post" onSubmit={this.handleSubmit}>
+        <div className="form-query form-row align-items-center">
           <div className="col-auto">
-            <input name="title" type="text" placeholder="PO Title" defaultValue={this.state.mostRecentQuery.t} onChange={this.handleSearchChange}/>
+            Search:
           </div>
           <div className="col-auto">
-            <input name="min_total" type="text" placeholder="Min Cost" defaultValue={this.state.mostRecentQuery.mt} onChange={this.handleSearchChange}/>
+            <input name="title" type="text" placeholder="PO Title" defaultValue={this.state.mostRecentQuery.t} onChange={this.handleSearchChange} className="form-control"/>
           </div>
-        </form>
+          <div className="col-auto">
+            <input name="min_total" type="text" placeholder="Min Cost" defaultValue={this.state.mostRecentQuery.mt} onChange={this.handleSearchChange} className="form-control"/>
+          </div>
+        </div>
         {posTable}
         <Paginator {...(this.state.queryResult ? this.state.queryResult.info : {})} page={page} path={AppRoutes.purchaseOrders}/>
       </div>
