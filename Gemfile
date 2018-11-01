@@ -45,7 +45,13 @@ gem 'loofah', '~> 2.2.3' # security issue.
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'bootstrap'
+# Security issues:
+gem 'sprockets', '>= 3.7.2'
+gem 'ffi', '>= 1.9.24'
+gem 'rubyzip', '>= 1.2.2'
+
+# More libs...
+gem 'bootstrap', '>= 4.1.2'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'haml-rails'
